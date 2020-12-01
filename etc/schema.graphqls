@@ -1,0 +1,94 @@
+# Landofcoder
+#
+# NOTICE OF LICENSE
+#
+# This source file is subject to the Landofcoder.com license that is
+# available through the world-wide-web at this URL:
+# https://landofcoder.com/LICENSE.txt
+#
+# DISCLAIMER
+#
+# Do not edit or add to this file if you wish to upgrade this extension to newer
+# version in the future.
+#
+# @category    Landofcoder
+# @package     Lof_MarketplaceGraphQl
+# @copyright   Copyright (c) Landofcoder (https://landofcoder.com/)
+# @license     https://landofcoder.com/LICENSE.txt
+
+enum UrlRewriteEntityTypeEnum {
+    LOF_PRODUCTLABEL_LABEL
+}
+
+type Query {
+    lofProductLabelById(
+        entity_id: Int! @doc(description: "Current Label id")
+    ): Label @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\LabelById") @doc(description: "Get label by ID")
+    lofProductLabelList(
+        filter: LabelFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+    ):Labels @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Labels") @doc(description: "The label query searches for labels that match the criteria specified in the search and filter attributes")
+}
+
+type Label {
+    entity_id: String @doc(description: "Label ID")
+    name: String @doc(description: "Name")
+    status: Int @doc(description: "Status")
+    priority: String @doc(description: "Priority")
+    exclusively: Int @doc(description: "Exclusively")
+    use_for_parent: Int @doc(description: "Use for parent")
+    product_type: String @doc(description: "Product type")
+    product_image: String @doc(description: "Product image")
+    product_shape: String @doc(description: "Product shape")
+    product_label_text: String @doc(description: "Product label text")
+    product_label_color: String @doc(description: "Product label color")
+    product_text_color: String @doc(description: "Product text color")
+    product_text_size: String @doc(description: "Product text size")
+    product_image_size: String @doc(description: "Product image size")
+    product_position: String @doc(description: "Product position")
+    product_custom_css: String @doc(description: "Product custom css")
+    same_as_product: Int @doc(description: "Same as product")
+    cat_type: String @doc(description: "Category type")
+    cat_image: String @doc(description: "Category image")
+    cat_shape: String @doc(description: "Category shape")
+    cat_label_text: String @doc(description: "Category label text")
+    cat_label_color: String @doc(description: "Category label color")
+    cat_text_color: String @doc(description: "Category text color")
+    cat_text_size: String @doc(description: "Category text size")
+    cat_image_size: String @doc(description: "Category image size")
+    cat_position: String @doc(description: "Category position")
+    cat_custom_css: String @doc(description: "Category custom css")
+    stores: String @doc(description: "Category custom css")
+    is_new: Int @doc(description: "Is new")
+    is_sale: Int @doc(description: "Is sale")
+    special_price_only: Int @doc(description: "Special price only")
+    stock_less: String @doc(description: "Stock less")
+    stock_more: String @doc(description: "Stock more")
+    stock_status: String @doc(description: "Stock status")
+    from_date: String @doc(description: "From date")
+    to_date: String @doc(description: "To date")
+    date_range_enabled: Int @doc(description: "Date range enabled")
+    from_price: String @doc(description: "From price")
+    to_price: String @doc(description: "To price")
+    by_price: String @doc(description: "By price")
+    price_range_enabled: String @doc(description: "Price range enabled")
+    customer_group_ids: String @doc(description: "Customer group ids")
+    cond_serialize: String @doc(description: "Condition")
+    customer_group_enabled: Int @doc(description: "Customer group enabled")
+    product_stock_enabled: Int @doc(description: "Product stock enabled")
+    stock_higher: String @doc(description: "Stock higher")
+}
+
+type Labels {
+    total_count: Int @doc(description: "The number of labels returned")
+    items: [Label] @doc(description: "An array of labels that match the specified search criteria")
+}
+
+input LabelFilterInput {
+    entity_id: FilterTypeInput @doc(description: "Label ID")
+    name: FilterTypeInput @doc(description: "Name")
+    status: FilterTypeInput @doc(description: "Status")
+    stores: FilterTypeInput @doc(description: "Stores")
+    or: LabelFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
