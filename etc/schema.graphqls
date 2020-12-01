@@ -17,78 +17,75 @@
 # @license     https://landofcoder.com/LICENSE.txt
 
 enum UrlRewriteEntityTypeEnum {
-    LOF_PRODUCTLABEL_LABEL
+    LOF_MARKETPLACE
 }
 
 type Query {
-    lofProductLabelById(
-        entity_id: Int! @doc(description: "Current Label id")
-    ): Label @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\LabelById") @doc(description: "Get label by ID")
-    lofProductLabelList(
-        filter: LabelFilterInput @doc(description: "Identifies which question attributes to search for and return."),
-        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
-    ):Labels @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Labels") @doc(description: "The label query searches for labels that match the criteria specified in the search and filter attributes")
+    lofSellerById(
+        seller_id: Int! @doc(description: "Seller id")
+    ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerById") @doc(description: "Get Seller by ID")
+    lofSellerList(
+           filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+           pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+           currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+       ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
 }
 
-type Label {
-    entity_id: String @doc(description: "Label ID")
+type Seller {
+    seller_id: Int @doc(description: "Seller ID")
+    contact_number: String @doc(description: "Phone Number")
+    shop_title: String @doc(description: "Shop Title")
+    company_locality: String @doc(description: "Company Locality")
+    company_description: String @doc(description: "Company Description")
+    return_policy: String @doc(description: "Return Policy")
+    shipping_policy: String @doc(description: "Shipping Policy")
+    address: String @doc(description: "Address")
+    country: String @doc(description: "Country")
+    image: String @doc(description: "Image")
+    thumbnail: String @doc(description: "Thumbnail")
+    city: String @doc(description: "City")
+    region: String @doc(description: "Region")
+    group: String @doc(description: "Group")
+    url: String @doc(description: "Shop Url")
+    customer_id: Int @doc(description: "Customer Id")
+    email: String @doc(description: "Email")
     name: String @doc(description: "Name")
+    sale: String @doc(description: "Sale")
+    commission_id: String @doc(description: "Commission Id")
+    page_layout: String @doc(description: "Page Layout")
     status: Int @doc(description: "Status")
-    priority: String @doc(description: "Priority")
-    exclusively: Int @doc(description: "Exclusively")
-    use_for_parent: Int @doc(description: "Use for parent")
-    product_type: String @doc(description: "Product type")
-    product_image: String @doc(description: "Product image")
-    product_shape: String @doc(description: "Product shape")
-    product_label_text: String @doc(description: "Product label text")
-    product_label_color: String @doc(description: "Product label color")
-    product_text_color: String @doc(description: "Product text color")
-    product_text_size: String @doc(description: "Product text size")
-    product_image_size: String @doc(description: "Product image size")
-    product_position: String @doc(description: "Product position")
-    product_custom_css: String @doc(description: "Product custom css")
-    same_as_product: Int @doc(description: "Same as product")
-    cat_type: String @doc(description: "Category type")
-    cat_image: String @doc(description: "Category image")
-    cat_shape: String @doc(description: "Category shape")
-    cat_label_text: String @doc(description: "Category label text")
-    cat_label_color: String @doc(description: "Category label color")
-    cat_text_color: String @doc(description: "Category text color")
-    cat_text_size: String @doc(description: "Category text size")
-    cat_image_size: String @doc(description: "Category image size")
-    cat_position: String @doc(description: "Category position")
-    cat_custom_css: String @doc(description: "Category custom css")
-    stores: String @doc(description: "Category custom css")
-    is_new: Int @doc(description: "Is new")
-    is_sale: Int @doc(description: "Is sale")
-    special_price_only: Int @doc(description: "Special price only")
-    stock_less: String @doc(description: "Stock less")
-    stock_more: String @doc(description: "Stock more")
-    stock_status: String @doc(description: "Stock status")
-    from_date: String @doc(description: "From date")
-    to_date: String @doc(description: "To date")
-    date_range_enabled: Int @doc(description: "Date range enabled")
-    from_price: String @doc(description: "From price")
-    to_price: String @doc(description: "To price")
-    by_price: String @doc(description: "By price")
-    price_range_enabled: String @doc(description: "Price range enabled")
-    customer_group_ids: String @doc(description: "Customer group ids")
-    cond_serialize: String @doc(description: "Condition")
-    customer_group_enabled: Int @doc(description: "Customer group enabled")
-    product_stock_enabled: Int @doc(description: "Product stock enabled")
-    stock_higher: String @doc(description: "Stock higher")
+    position: Int @doc(description: "Position")
+    twitter_id: Int @doc(description: "Twitter Id")
+    facebook_id: Int @doc(description: "Facebook Id")
+    gplus_id: Int @doc(description: "Gplus Id")
+    youtube_id: Int @doc(description: "Youtube Id")
+    vimeo_id: Int @doc(description: "Vimeo Id")
+    instagram_id: Int @doc(description: "Instagram Id")
+    pinterest_id: Int @doc(description: "Pinterest Id")
+    linkedin_id: Int @doc(description: "Linkedin Id")
+    tw_active: Int @doc(description: "Tw Active")
+    fb_active: Int @doc(description: "Fb Active")
+    gplus_active: Int @doc(description: "Gplus Active")
+    vimeo_active: Int @doc(description: "Vimeo Active")
+    instagram_active: Int @doc(description: "Instagram Active")
+    pinterest_active: Int @doc(description: "Pinterest Active")
+    linkedin_active: Int @doc(description: "Linkedin Active")
+    banner_pic: String @doc(description: "Banner Pic")
+    shop_url: String @doc(description: "Shop Url")
+    logo_pic: String @doc(description: "Logo Pic")
+    store_id: String @doc(description: "Store Id")
+}
+type Sellers {
+    total_count: Int @doc(description: "The number of sellers returned")
+    items: [Seller] @doc(description: "An array of sellers that match the specified search criteria")
 }
 
-type Labels {
-    total_count: Int @doc(description: "The number of labels returned")
-    items: [Label] @doc(description: "An array of labels that match the specified search criteria")
-}
-
-input LabelFilterInput {
-    entity_id: FilterTypeInput @doc(description: "Label ID")
+input SellerFilterInput {
+    seller_id: FilterTypeInput @doc(description: "Seller ID")
     name: FilterTypeInput @doc(description: "Name")
     status: FilterTypeInput @doc(description: "Status")
-    stores: FilterTypeInput @doc(description: "Stores")
-    or: LabelFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+    email: FilterTypeInput @doc(description: "Email")
+    or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
 }
+
+

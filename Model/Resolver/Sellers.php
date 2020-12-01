@@ -7,11 +7,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Class LabelById
+ * Class Sellers
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class Labels extends AbstractProductLabelQuery implements ResolverInterface {
+class Sellers extends AbstractSellerQuery implements ResolverInterface {
     /**
      * @inheritdoc
      */
@@ -27,7 +27,7 @@ class Labels extends AbstractProductLabelQuery implements ResolverInterface {
         $searchCriteria->setCurrentPage( $args['currentPage'] );
         $searchCriteria->setPageSize( $args['pageSize'] );
 
-        $searchResult = $this->_labelRepository->getList( $searchCriteria );
+        $searchResult = $this->_sellerRepository->getListSellers( $searchCriteria );
 
         return [
             'total_count' => $searchResult->getTotalCount(),

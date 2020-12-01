@@ -26,24 +26,20 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Lof\ProductLabel\Api\LabelRepositoryInterface;
+use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 
 /**
- * Class AbstractProductLabelQuery
+ * Class AbstractSellerQuery
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-abstract class AbstractProductLabelQuery
+abstract class AbstractSellerQuery
 {
     /**
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
-    /**
-     * @var LabelRepositoryInterface
-     */
-    protected $_labelRepository;
 
     /**
      * @var ProductRepositoryInterface
@@ -54,19 +50,25 @@ abstract class AbstractProductLabelQuery
      * @var int
      */
     protected $_labelFlag;
+    /**
+     * @var SellersFrontendRepositoryInterface
+     */
+    protected $_sellerRepository;
+
 
     /**
-     * AbstractGift constructor.
-     * @param LabelRepositoryInterface $productLabel
+     * AbstractSellerQuery constructor.
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SellersFrontendRepositoryInterface $seller
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        LabelRepositoryInterface $productLabel,
+        SellersFrontendRepositoryInterface $seller,
         ProductRepositoryInterface $productRepository
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->_labelRepository = $productLabel;
+        $this->_sellerRepository = $seller;
         $this->_productRepository = $productRepository;
     }
 
@@ -77,8 +79,8 @@ abstract class AbstractProductLabelQuery
      */
     protected function validateArgs(array $args)
     {
-        if ($this->_labelFlag && !isset($args['entity_id'])) {
-            throw new GraphQlInputException(__('Label id is required.'));
+        if ($this->_labelFlag && !isset($args['seller_id'])) {
+            throw new GraphQlInputException(__('Seller id is required.'));
         }
     }
 }
