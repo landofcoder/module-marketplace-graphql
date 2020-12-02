@@ -7,11 +7,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Class Sellers
+ * Class ProductSellers
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class Sellers extends AbstractSellerQuery implements ResolverInterface {
+class ProductSellers extends AbstractSellerQuery implements ResolverInterface {
     /**
      * @inheritdoc
      */
@@ -23,11 +23,11 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface {
         array $args = null
     )
     {
-        $searchCriteria = $this->searchCriteriaBuilder->build( 'lof_marketplace_seller', $args );
+        $searchCriteria = $this->searchCriteriaBuilder->build( 'lof_marketplace_product', $args );
         $searchCriteria->setCurrentPage( $args['currentPage'] );
         $searchCriteria->setPageSize( $args['pageSize'] );
 
-        $searchResult = $this->_sellerRepository->getListSellers( $searchCriteria );
+        $searchResult = $this->_productSeller->getList($searchCriteria);
 
         return [
             'total_count' => $searchResult->getTotalCount(),

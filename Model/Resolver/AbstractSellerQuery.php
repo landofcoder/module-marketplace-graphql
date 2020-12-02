@@ -27,6 +27,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
+use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
 
 /**
  * Class AbstractSellerQuery
@@ -54,21 +55,28 @@ abstract class AbstractSellerQuery
      * @var SellersFrontendRepositoryInterface
      */
     protected $_sellerRepository;
+    /**
+     * @var SellerProductsRepositoryInterface
+     */
+    protected SellerProductsRepositoryInterface $_productSeller;
 
 
     /**
      * AbstractSellerQuery constructor.
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SellersFrontendRepositoryInterface $seller
+     * @param SellerProductsRepositoryInterface $productSeller
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,
+        SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_sellerRepository = $seller;
+        $this->_productSeller = $productSeller;
         $this->_productRepository = $productRepository;
     }
 

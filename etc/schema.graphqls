@@ -24,11 +24,20 @@ type Query {
     lofSellerById(
         seller_id: Int! @doc(description: "Seller id")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerById") @doc(description: "Get Seller by ID")
-    lofSellerList(
-           filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+    lofProductBySellerId(
+        seller_id: Int! @doc(description: "Seller id")
+    ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerId") @doc(description: "Get Product by Seller ID")
+    lofProductList(
+           filter: SellerProductFilterInput @doc(description: "Identifies which question attributes to search for and return."),
            pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
            currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
-       ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
+       ):Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductSellers") @doc(description: "The seller product query searches for seller products that match the criteria specified in the search and filter attributes")
+
+    lofSellerList(
+       filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+   ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
 }
 
 type Seller {
@@ -80,12 +89,43 @@ type Sellers {
     items: [Seller] @doc(description: "An array of sellers that match the specified search criteria")
 }
 
+type Products {
+    total_count: Int @doc(description: "The number of seller products returned")
+    items: [ProductSeller] @doc(description: "An array of seller products that match the specified search criteria")
+}
+
 input SellerFilterInput {
     seller_id: FilterTypeInput @doc(description: "Seller ID")
     name: FilterTypeInput @doc(description: "Name")
     status: FilterTypeInput @doc(description: "Status")
     email: FilterTypeInput @doc(description: "Email")
     or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+input SellerProductFilterInput {
+    seller_id: FilterTypeInput @doc(description: "Seller ID")
+    product_name: FilterTypeInput @doc(description: "Name")
+    type_id: FilterTypeInput @doc(description: "Type")
+    price: FilterTypeInput @doc(description: "Email")
+    created_at: FilterTypeInput @doc(description: "Created At")
+    approval: FilterTypeInput @doc(description: "Approval")
+    sku: FilterTypeInput @doc(description: "SKU")
+    or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+type ProductSeller {
+    entity_id: Int @doc(description: "Entity ID")
+    type_id: String @doc(description: "Type")
+    sku: String @doc(description: "SKU")
+    has_options: Int @doc(description: "has_options")
+    required_options: Int @doc(description: "Required Options")
+    created_at: String @doc(description: "Created At")
+    updated_at: String @doc(description: "Updated At")
+    seller_id: Int @doc(description: "Seller Id")
+    approval: Int @doc(description: "Approval")
+    name: String @doc(description: "Name")
+    price: Float @doc(description: "Price")
+    attribute_set_id: Int @doc(description: "Attribute Set Id")
 }
 
 

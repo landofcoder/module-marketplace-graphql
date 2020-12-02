@@ -6,11 +6,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Class SellerById
+ * Class ProductBySellerId
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerById extends AbstractSellerQuery implements ResolverInterface {
+class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface {
     /**
      * @inheritDoc
      */
@@ -19,6 +19,6 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface {
         $this->_labelFlag = 1;
         $this->validateArgs( $args );
 
-        return $this->_sellerRepository->getById($args['seller_id']);
+        return  $this->_productSeller->getSellerProducts( $args['seller_id']);
     }
 }
