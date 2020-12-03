@@ -29,6 +29,10 @@ type Query {
         product_sku: String! @doc(description: "Product SKU")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByProduct") @doc(description: "Get Seller by ID")
 
+    lofSellerRate(
+        seller_id: Int! @doc(description: "Seller Id")
+    ): SellerRates @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerRate") @doc(description: "Get Seller Rate by Seller Id")
+
     lofProductBySellerId(
         seller_id: Int! @doc(description: "Seller id")
         search: String @doc(description: "Performs a full-text search using the specified key words."),
@@ -50,6 +54,22 @@ type Query {
        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
+}
+
+
+type SellerRate {
+    rating_id: Int @doc(description: "Rating ID")
+    seller_id: Int @doc(description: "Seller ID")
+    customer_id: Int @doc(description: "Customer ID")
+    rate1: Int @doc(description: "Rate 1")
+    rate2: Int @doc(description: "Rate 2")
+    rate3: Int @doc(description: "Rate 3")
+    email: String @doc(description: "Email")
+    title: String @doc(description: "Title")
+    status: String @doc(description: "Status")
+    detail: String @doc(description: "Detail")
+    nickname: String @doc(description: "Nick Name")
+    created_at: String @doc(description: "Created At")
 }
 
 type Seller {
@@ -104,6 +124,11 @@ type Sellers {
 type Products {
     total_count: Int @doc(description: "The number of seller products returned")
     items: [ProductInterface] @doc(description: "An array of seller products that match the specified search criteria")
+}
+
+type SellerRates {
+    total_count: Int @doc(description: "The number of seller rates returned")
+    items: [SellerRate] @doc(description: "An array of seller rates")
 }
 
 input SellerFilterInput {
