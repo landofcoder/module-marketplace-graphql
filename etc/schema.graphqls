@@ -17,78 +17,184 @@
 # @license     https://landofcoder.com/LICENSE.txt
 
 enum UrlRewriteEntityTypeEnum {
-    LOF_PRODUCTLABEL_LABEL
+    LOF_MARKETPLACE
 }
 
 type Query {
-    lofProductLabelById(
-        entity_id: Int! @doc(description: "Current Label id")
-    ): Label @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\LabelById") @doc(description: "Get label by ID")
-    lofProductLabelList(
-        filter: LabelFilterInput @doc(description: "Identifies which question attributes to search for and return."),
-        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+    lofSellerById(
+        seller_id: Int! @doc(description: "Seller id")
+    ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerById") @doc(description: "Get Seller by ID")
+
+    lofSellerByProduct(
+        product_sku: String! @doc(description: "Product SKU")
+    ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByProduct") @doc(description: "Get Seller by ID")
+
+    lofProductBySellerId(
+        seller_id: Int! @doc(description: "Seller id")
+        search: String @doc(description: "Performs a full-text search using the specified key words."),
+        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
-    ):Labels @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Labels") @doc(description: "The label query searches for labels that match the criteria specified in the search and filter attributes")
+        sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
+    ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerId") @doc(description: "Get Product by Seller ID")
+    lofProductList(
+        search: String @doc(description: "Performs a full-text search using the specified key words."),
+        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
+       ):Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductSellers") @doc(description: "The seller product query searches for seller products that match the criteria specified in the search and filter attributes")
+
+    lofSellerList(
+       filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+   ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
 }
 
-type Label {
-    entity_id: String @doc(description: "Label ID")
+type Seller {
+    seller_id: Int @doc(description: "Seller ID")
+    contact_number: String @doc(description: "Phone Number")
+    shop_title: String @doc(description: "Shop Title")
+    company_locality: String @doc(description: "Company Locality")
+    company_description: String @doc(description: "Company Description")
+    return_policy: String @doc(description: "Return Policy")
+    shipping_policy: String @doc(description: "Shipping Policy")
+    address: String @doc(description: "Address")
+    country: String @doc(description: "Country")
+    image: String @doc(description: "Image")
+    thumbnail: String @doc(description: "Thumbnail")
+    city: String @doc(description: "City")
+    region: String @doc(description: "Region")
+    group: String @doc(description: "Group")
+    url: String @doc(description: "Shop Url")
+    customer_id: Int @doc(description: "Customer Id")
+    email: String @doc(description: "Email")
     name: String @doc(description: "Name")
+    sale: String @doc(description: "Sale")
+    commission_id: String @doc(description: "Commission Id")
+    page_layout: String @doc(description: "Page Layout")
     status: Int @doc(description: "Status")
-    priority: String @doc(description: "Priority")
-    exclusively: Int @doc(description: "Exclusively")
-    use_for_parent: Int @doc(description: "Use for parent")
-    product_type: String @doc(description: "Product type")
-    product_image: String @doc(description: "Product image")
-    product_shape: String @doc(description: "Product shape")
-    product_label_text: String @doc(description: "Product label text")
-    product_label_color: String @doc(description: "Product label color")
-    product_text_color: String @doc(description: "Product text color")
-    product_text_size: String @doc(description: "Product text size")
-    product_image_size: String @doc(description: "Product image size")
-    product_position: String @doc(description: "Product position")
-    product_custom_css: String @doc(description: "Product custom css")
-    same_as_product: Int @doc(description: "Same as product")
-    cat_type: String @doc(description: "Category type")
-    cat_image: String @doc(description: "Category image")
-    cat_shape: String @doc(description: "Category shape")
-    cat_label_text: String @doc(description: "Category label text")
-    cat_label_color: String @doc(description: "Category label color")
-    cat_text_color: String @doc(description: "Category text color")
-    cat_text_size: String @doc(description: "Category text size")
-    cat_image_size: String @doc(description: "Category image size")
-    cat_position: String @doc(description: "Category position")
-    cat_custom_css: String @doc(description: "Category custom css")
-    stores: String @doc(description: "Category custom css")
-    is_new: Int @doc(description: "Is new")
-    is_sale: Int @doc(description: "Is sale")
-    special_price_only: Int @doc(description: "Special price only")
-    stock_less: String @doc(description: "Stock less")
-    stock_more: String @doc(description: "Stock more")
-    stock_status: String @doc(description: "Stock status")
-    from_date: String @doc(description: "From date")
-    to_date: String @doc(description: "To date")
-    date_range_enabled: Int @doc(description: "Date range enabled")
-    from_price: String @doc(description: "From price")
-    to_price: String @doc(description: "To price")
-    by_price: String @doc(description: "By price")
-    price_range_enabled: String @doc(description: "Price range enabled")
-    customer_group_ids: String @doc(description: "Customer group ids")
-    cond_serialize: String @doc(description: "Condition")
-    customer_group_enabled: Int @doc(description: "Customer group enabled")
-    product_stock_enabled: Int @doc(description: "Product stock enabled")
-    stock_higher: String @doc(description: "Stock higher")
+    position: Int @doc(description: "Position")
+    twitter_id: Int @doc(description: "Twitter Id")
+    facebook_id: Int @doc(description: "Facebook Id")
+    gplus_id: Int @doc(description: "Gplus Id")
+    youtube_id: Int @doc(description: "Youtube Id")
+    vimeo_id: Int @doc(description: "Vimeo Id")
+    instagram_id: Int @doc(description: "Instagram Id")
+    pinterest_id: Int @doc(description: "Pinterest Id")
+    linkedin_id: Int @doc(description: "Linkedin Id")
+    tw_active: Int @doc(description: "Tw Active")
+    fb_active: Int @doc(description: "Fb Active")
+    gplus_active: Int @doc(description: "Gplus Active")
+    vimeo_active: Int @doc(description: "Vimeo Active")
+    instagram_active: Int @doc(description: "Instagram Active")
+    pinterest_active: Int @doc(description: "Pinterest Active")
+    linkedin_active: Int @doc(description: "Linkedin Active")
+    banner_pic: String @doc(description: "Banner Pic")
+    shop_url: String @doc(description: "Shop Url")
+    logo_pic: String @doc(description: "Logo Pic")
+    store_id: String @doc(description: "Store Id")
+}
+type Sellers {
+    total_count: Int @doc(description: "The number of sellers returned")
+    items: [Seller] @doc(description: "An array of sellers that match the specified search criteria")
 }
 
-type Labels {
-    total_count: Int @doc(description: "The number of labels returned")
-    items: [Label] @doc(description: "An array of labels that match the specified search criteria")
+type Products {
+    total_count: Int @doc(description: "The number of seller products returned")
+    items: [ProductInterface] @doc(description: "An array of seller products that match the specified search criteria")
 }
 
-input LabelFilterInput {
-    entity_id: FilterTypeInput @doc(description: "Label ID")
+input SellerFilterInput {
+    seller_id: FilterTypeInput @doc(description: "Seller ID")
     name: FilterTypeInput @doc(description: "Name")
     status: FilterTypeInput @doc(description: "Status")
-    stores: FilterTypeInput @doc(description: "Stores")
-    or: LabelFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+    email: FilterTypeInput @doc(description: "Email")
+    or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
 }
+
+input SellerProductFilterInput {
+    name: FilterTypeInput @doc(description: "Name")
+    type_id: FilterTypeInput @doc(description: "Type")
+    price: FilterTypeInput @doc(description: "Price")
+    created_at: FilterTypeInput @doc(description: "Created At")
+    approval: FilterTypeInput @doc(description: "Approval")
+    sku: FilterTypeInput @doc(description: "SKU")
+    or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
+    id: Int @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
+    name: String @doc(description: "The product name. Customers use this name to identify the product.")
+    sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
+    description: ComplexTextValue @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
+    short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
+    special_price: Float @doc(description: "The discounted price of the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\SpecialPrice")
+    special_from_date: String @doc(description: "The beginning date that a product has a special price.")
+    special_to_date: String @doc(description: "The end date that a product has a special price.")
+    attribute_set_id: Int @doc(description: "The attribute set assigned to the product.")
+    meta_title: String @doc(description: "A string that is displayed in the title bar and tab of the browser and in search results lists.")
+    meta_keyword: String @doc(description: "A comma-separated list of keywords that are visible only to search engines.")
+    meta_description: String @doc(description: "A brief overview of the product for search results listings, maximum 255 characters.")
+    image: ProductImage @doc(description: "The relative path to the main image on the product page.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    small_image: ProductImage @doc(description: "The relative path to the small image, which is used on catalog pages.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    thumbnail: ProductImage @doc(description: "The relative path to the product's thumbnail image.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
+    new_to_date: String @doc(description: "The end date for new product listings.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
+    tier_price: Float @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
+    options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page.")
+    created_at: String @doc(description: "Timestamp indicating when the product was created.")
+    updated_at: String @doc(description: "Timestamp indicating when the product was updated.")
+    country_of_manufacture: String @doc(description: "The product's country of origin.")
+    type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.") @deprecated(reason: "Use __typename instead.")
+    websites: [Website] @doc(description: "An array of websites in which the product is available.") @deprecated(reason: "The field should not be used on the storefront.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
+    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
+    media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
+    price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
+    price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
+    gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
+    manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
+    canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
+    media_gallery: [MediaGalleryInterface] @doc(description: "An array of Media Gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
+}
+
+input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, use @ProductAttributeFilterInput instead. ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
+    name: FilterTypeInput @doc(description: "The product name. Customers use this name to identify the product.")
+    sku: FilterTypeInput @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
+    description: FilterTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
+    short_description: FilterTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
+    price: FilterTypeInput @doc(description: "The price of an item.")
+    special_price: FilterTypeInput @doc(description: "The discounted price of the product. Do not include the currency code.")
+    special_from_date: FilterTypeInput @doc(description: "The beginning date that a product has a special price.")
+    special_to_date: FilterTypeInput @doc(description: "The end date that a product has a special price.")
+    weight: FilterTypeInput @doc(description: "The weight of the item, in units defined by the store.")
+    manufacturer: FilterTypeInput @doc(description: "A number representing the product's manufacturer.")
+    meta_title: FilterTypeInput @doc(description: "A string that is displayed in the title bar and tab of the browser and in search results lists.")
+    meta_keyword: FilterTypeInput @doc(description: "A comma-separated list of keywords that are visible only to search engines.")
+    meta_description: FilterTypeInput @doc(description: "A brief overview of the product for search results listings, maximum 255 characters.")
+    image: FilterTypeInput @doc(description: "The relative path to the main image on the product page.")
+    small_image: FilterTypeInput @doc(description: "The relative path to the small image, which is used on catalog pages.")
+    thumbnail: FilterTypeInput @doc(description: "The relative path to the product's thumbnail image.")
+    tier_price: FilterTypeInput @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
+    news_from_date: FilterTypeInput @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.")
+    news_to_date: FilterTypeInput @doc(description: "The end date for new product listings.")
+    custom_layout_update: FilterTypeInput @doc(description: "XML code that is applied as a layout update to the product page.")
+    min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
+    max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
+    category_id: FilterTypeInput @doc(description: "Category ID the product belongs to.")
+    options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page.")
+    required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options.")
+    has_options: FilterTypeInput @doc(description: "Indicates whether additional attributes have been created for the product.")
+    image_label: FilterTypeInput @doc(description: "The label assigned to a product image.")
+    small_image_label: FilterTypeInput @doc(description: "The label assigned to a product's small image.")
+    thumbnail_label: FilterTypeInput @doc(description: "The label assigned to a product's thumbnail image.")
+    created_at: FilterTypeInput @doc(description: "Timestamp indicating when the product was created.")
+    updated_at: FilterTypeInput @doc(description: "Timestamp indicating when the product was updated.")
+    country_of_manufacture: FilterTypeInput @doc(description: "The product's country of origin.")
+    custom_layout: FilterTypeInput @doc(description: "The name of a custom layout.")
+    gift_message_available: FilterTypeInput @doc(description: "Indicates whether a gift message is available.")
+    or: ProductFilterInput @doc(description: "The keyword required to perform a logical OR comparison.")
+}
+
