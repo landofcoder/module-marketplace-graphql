@@ -58,7 +58,7 @@ abstract class AbstractSellerQuery
     /**
      * @var SellerProductsRepositoryInterface
      */
-    protected SellerProductsRepositoryInterface $_productSeller;
+    protected $_productSeller;
 
 
     /**
