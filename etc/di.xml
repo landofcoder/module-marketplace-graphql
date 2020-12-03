@@ -36,4 +36,7 @@
             </argument>
         </arguments>
     </type>
+
+    <preference type="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\Search" for="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+
 </config>
