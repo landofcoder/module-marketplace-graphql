@@ -10,7 +10,7 @@
 
 
 ## Main Functionalities
-magento 2 product label graphql extension
+magento 2 marketplace graphql extension
 
 ## Installation
 \* = in production please use the `--keep-generated` option
@@ -39,29 +39,6 @@ magento 2 product label graphql extension
 
 
 
-
-## Specifications
-
- - Model
-	- Label
-
- - API Endpoint
-	- GET - Lof\MarketplaceGraphQl\Api\Lof_labelsManagementInterface > Lof\MarketplaceGraphQl\Model\Lof_labelsManagement
-
- - API Endpoint
-	- POST - Lof\MarketplaceGraphQl\Api\Lof_labelsManagementInterface > Lof\MarketplaceGraphQl\Model\Lof_labelsManagement
-
- - API Endpoint
-	- PUT - Lof\MarketplaceGraphQl\Api\Lof_labelsManagementInterface > Lof\MarketplaceGraphQl\Model\Lof_labelsManagement
-
- - API Endpoint
-	- GET - Lof\MarketplaceGraphQl\Api\Lof_labelManagementInterface > Lof\MarketplaceGraphQl\Model\Lof_labelManagement
-
- - API Endpoint
-	- DELETE - Lof\MarketplaceGraphQl\Api\Lof_labelsManagementInterface > Lof\MarketplaceGraphQl\Model\Lof_labelsManagement
-
-
-## Attributes
 
 
 

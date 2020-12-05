@@ -41,6 +41,7 @@ type Query {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerId") @doc(description: "Get Product by Seller ID")
+
     lofProductList(
         search: String @doc(description: "Performs a full-text search using the specified key words."),
         filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
@@ -114,7 +115,9 @@ type Seller {
     banner_pic: String @doc(description: "Banner Pic")
     shop_url: String @doc(description: "Shop Url")
     logo_pic: String @doc(description: "Logo Pic")
-    store_id: String @doc(description: "Store Id")
+    store_id: [Int] @doc(description: "Store Id")
+    seller_rates: SellerRates @doc(description: "Seller Rates")
+    products: SellerProducts @doc(description: "Products")
 }
 type Sellers {
     total_count: Int @doc(description: "The number of sellers returned")
@@ -147,6 +150,17 @@ input SellerProductFilterInput {
     approval: FilterTypeInput @doc(description: "Approval")
     sku: FilterTypeInput @doc(description: "SKU")
     or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+type SellerProducts {
+    total_count: Int @doc(description: "The number of seller products returned")
+    items: [SellerProduct] @doc(description: "An array of seller products")
+}
+
+type SellerProduct {
+    product_id: Int @doc(description: "Product Id")
+    product_name: String @doc(description: "Product Name")
+    status: Int @doc(description: "Status")
+    store_id: Int @doc(description: "Store Id")
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
