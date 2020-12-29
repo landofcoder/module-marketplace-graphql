@@ -2,8 +2,12 @@
 
 namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
+use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
+use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -13,6 +17,24 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
 class Sellers extends AbstractSellerQuery implements ResolverInterface {
+
+    /**
+     * @var SellersFrontendRepositoryInterface
+     */
+    private $sellers;
+
+    public function __construct(
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SellersFrontendRepositoryInterface $seller,
+        SellerProductsRepositoryInterface $productSeller,
+        ProductRepositoryInterface $productRepository,
+        Products\Query\SellerQueryInterface $sellers
+    )
+    {
+        $this->sellers = $sellers;
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+    }
+
     /**
      * @inheritdoc
      */
@@ -34,7 +56,7 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface {
         $searchCriteria->setCurrentPage( $args['currentPage'] );
         $searchCriteria->setPageSize( $args['pageSize'] );
 
-        $searchResult = $this->_sellerRepository->getListSellers( $searchCriteria );
+        $searchResult = $this->sellers->getListSellers($searchCriteria, $args, $info, $context);
 
         return [
             'total_count' => $searchResult->getTotalCount(),

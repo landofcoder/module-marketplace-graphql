@@ -38,5 +38,6 @@
     </type>
 
     <preference type="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\Search" for="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+    <preference type="Lof\MarketplaceGraphQl\Model\Resolver\Products\DataProvider\Sellers" for="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\SellerQueryInterface"/>
 
 </config>

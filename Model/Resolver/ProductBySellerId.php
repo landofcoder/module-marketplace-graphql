@@ -59,7 +59,7 @@ class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
             );
         }
 
-        $searchResult = $this->searchQuery->getResult($args, $info, $context, $args['seller_id']);
+        $searchResult = $this->searchQuery->getResult($args, $info, $context);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(
