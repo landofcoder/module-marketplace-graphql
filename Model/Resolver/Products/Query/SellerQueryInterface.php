@@ -1,23 +1,24 @@
 <?php
 namespace Lof\MarketplaceGraphQl\Model\Resolver\Products\Query;
 
-use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Search for products by criteria
  */
-interface ProductQueryInterface
+interface SellerQueryInterface
 {
     /**
      * Get product search result
      *
+     * @param SearchCriteriaInterface $criteria
      * @param array $args
      * @param ResolveInfo $info
      * @param ContextInterface $context
-     * @return SearchResult
+     * @return mixed
      */
-    public function getResult(array $args, ResolveInfo $info, ContextInterface $context): SearchResult;
+    public function getListSellers(SearchCriteriaInterface $criteria, array $args, ResolveInfo $info, ContextInterface $context);
 
 }

@@ -5,23 +5,30 @@
  */
 declare(strict_types=1);
 
-namespace Lof\MarketplaceGraphQl\Model\Resolver\Products\Query;
+namespace Lof\MarketplaceGraphQl\Model\Resolver\Products\DataProvider;
 
+use Lof\MarketPlace\Api\Data\SellerInterface;
+use Lof\MarketPlace\Api\Data\SellersSearchResultsInterface;
+use Lof\MarketPlace\Api\Data\SellersSearchResultsInterfaceFactory;
+use Lof\MarketPlace\Model\ResourceModel\Seller\CollectionFactory;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
-use Lof\MarketplaceGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
+use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\SellerQueryInterface;
+use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\FieldSelection;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Full text search for catalog using given search criteria.
  */
-class Search implements ProductQueryInterface
+class Sellers implements SellerQueryInterface
 {
     /**
      * @var SearchInterface
@@ -52,6 +59,22 @@ class Search implements ProductQueryInterface
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+    /**
+     * @var CollectionFactory
+     */
+    private $_collection;
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+    /**
+     * @var SellersSearchResultsInterfaceFactory
+     */
+    private $searchResultsFactory;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $_storeManager;
 
     /**
      * @param SearchInterface $search
@@ -59,6 +82,10 @@ class Search implements ProductQueryInterface
      * @param PageSizeProvider $pageSize
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
+     * @param CollectionFactory $collection
+     * @param StoreManagerInterface $storeManager
+     * @param SellersSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
@@ -67,14 +94,64 @@ class Search implements ProductQueryInterface
         PageSizeProvider $pageSize,
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
+        CollectionFactory $collection,
+        StoreManagerInterface $storeManager,
+        SellersSearchResultsInterfaceFactory $searchResultsFactory,
+        CollectionProcessorInterface $collectionProcessor,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
         $this->pageSizeProvider = $pageSize;
         $this->fieldSelection = $fieldSelection;
+        $this->_collection = $collection;
         $this->productsProvider = $productsProvider;
+        $this->_storeManager = $storeManager;
+        $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+    }
+
+    /**
+     * @param SearchCriteriaInterface $criteria
+     * @param array $args
+     * @param ResolveInfo $info
+     * @param ContextInterface $context
+     * @return SellerInterface|SellersSearchResultsInterface
+     * @throws InputException|\Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getListSellers
+    (
+        SearchCriteriaInterface $criteria,
+        array $args,
+        ResolveInfo $info,
+        ContextInterface $context
+    ) {
+        $collection = $this->_collection->create();
+        $this->collectionProcessor->process($criteria, $collection);
+        $searchResults = $this->searchResultsFactory->create();
+        $items = [];
+        foreach ($collection as $val) {
+            $data = $val->getData();
+            if(isset($data['image']) && $data['image']){
+                $data["image"] = $this->_storeManager->getStore()->getBaseUrl(
+                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                    ) . $data["image"];
+
+                $data["thumbnail"] = $this->_storeManager->getStore()->getBaseUrl(
+                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                    ) . $data["thumbnail"];
+            }
+            if(isset($data['store_id']) && $data['store_id']) {
+                $data['store_id'] = implode(',',$data['store_id']);
+            }
+            $args['seller_id'] = $val->getData('seller_id');
+            $data['products'] = $this->getResult( $args, $info, $context);
+            $items[] = $data;
+        }
+        $searchResults->setItems($items);
+        $searchResults->setTotalCount($collection->getSize());
+        return $searchResults;
     }
 
     /**
@@ -83,14 +160,13 @@ class Search implements ProductQueryInterface
      * @param array $args
      * @param ResolveInfo $info
      * @param ContextInterface $context
-     * @return SearchResult
-     * @throws InputException
+     * @return array
      */
     public function getResult(
         array $args,
         ResolveInfo $info,
         ContextInterface $context
-    ): SearchResult {
+    ) {
         $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
         $searchCriteria = $this->buildSearchCriteria($args, $info);
 
@@ -111,7 +187,7 @@ class Search implements ProductQueryInterface
                 $itemsResults,
                 $queryFields,
                 $context,
-                $args['seller_id']
+                (int)$args['seller_id']
             );
         } else {
             $searchResults = $this->productsProvider->getList(
@@ -122,8 +198,6 @@ class Search implements ProductQueryInterface
             );
         }
 
-        $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
-
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($searchResults->getItems() as $product) {
@@ -131,16 +205,11 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()]['model'] = $product;
         }
 
-        return $this->searchResultFactory->create(
+        return
             [
-                'totalCount' => $searchResults->getTotalCount(),
-                'productsSearchResult' => $productArray,
-                'searchAggregation' => $itemsResults->getAggregations(),
-                'pageSize' => $realPageSize,
-                'currentPage' => $realCurrentPage,
-                'totalPages' => $totalPages,
-            ]
-        );
+                'total_count' => $searchResults->getTotalCount(),
+                'items' => $productArray
+            ];
     }
 
     /**

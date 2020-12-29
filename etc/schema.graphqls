@@ -29,10 +29,6 @@ type Query {
         product_sku: String! @doc(description: "Product SKU")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByProduct") @doc(description: "Get Seller by ID")
 
-    lofSellerRate(
-        seller_id: Int! @doc(description: "Seller Id")
-    ): SellerRates @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerRate") @doc(description: "Get Seller Rate by Seller Id")
-
     lofProductBySellerId(
         seller_id: Int! @doc(description: "Seller id")
         search: String @doc(description: "Performs a full-text search using the specified key words."),
@@ -117,7 +113,7 @@ type Seller {
     logo_pic: String @doc(description: "Logo Pic")
     store_id: [Int] @doc(description: "Store Id")
     seller_rates: SellerRates @doc(description: "Seller Rates")
-    products: SellerProducts @doc(description: "Products")
+    products: Products @doc(description: "Products")
 }
 type Sellers {
     total_count: Int @doc(description: "The number of sellers returned")
@@ -169,7 +165,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: ComplexTextValue @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
     short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
-    special_price: Float @doc(description: "The discounted price of the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\SpecialPrice")
     special_from_date: String @doc(description: "The beginning date that a product has a special price.")
     special_to_date: String @doc(description: "The end date that a product has a special price.")
     attribute_set_id: Int @doc(description: "The attribute set assigned to the product.")

@@ -79,7 +79,8 @@ class Filter implements ProductQueryInterface
      * @param ContextInterface $context
      * @return SearchResult
      */
-    public function getResult(
+    public function getResult
+    (
         array $args,
         ResolveInfo $info,
         ContextInterface $context
