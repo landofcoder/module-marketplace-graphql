@@ -203,7 +203,7 @@ class Sellers implements SellerQueryInterface
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($searchResults->getItems() as $product) {
-            $productArray[$product->getId()] = $product->getData();
+            $productArray[$product->getId()] = $product->load($product->getId())->getData();
             $productArray[$product->getId()]['model'] = $product;
         }
 
