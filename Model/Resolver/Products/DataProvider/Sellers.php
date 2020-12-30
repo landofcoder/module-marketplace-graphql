@@ -167,6 +167,8 @@ class Sellers implements SellerQueryInterface
         ResolveInfo $info,
         ContextInterface $context
     ) {
+        unset($args['filter']);
+        $args['page_size'] = 20;
         $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
         $searchCriteria = $this->buildSearchCriteria($args, $info);
 
