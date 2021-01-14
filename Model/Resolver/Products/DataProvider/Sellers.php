@@ -12,7 +12,6 @@ use Lof\MarketPlace\Api\Data\SellersSearchResultsInterface;
 use Lof\MarketPlace\Api\Data\SellersSearchResultsInterfaceFactory;
 use Lof\MarketPlace\Model\ResourceModel\Seller\CollectionFactory;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -24,7 +23,7 @@ use Magento\Search\Model\Search\PageSizeProvider;
 use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\SellerQueryInterface;
 use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\FieldSelection;
 use Magento\Store\Model\StoreManagerInterface;
-
+use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 /**
  * Full text search for catalog using given search criteria.
  */
@@ -75,6 +74,10 @@ class Sellers implements SellerQueryInterface
      * @var StoreManagerInterface
      */
     private $_storeManager;
+    /**
+     * @var SellersFrontendRepositoryInterface
+     */
+    private $sellerFrontendRepository;
 
     /**
      * @param SearchInterface $search
@@ -87,6 +90,7 @@ class Sellers implements SellerQueryInterface
      * @param SellersSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SellersFrontendRepositoryInterface $sellersFrontendRepository
      */
     public function __construct(
         SearchInterface $search,
@@ -98,7 +102,8 @@ class Sellers implements SellerQueryInterface
         StoreManagerInterface $storeManager,
         SellersSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SellersFrontendRepositoryInterface $sellersFrontendRepository
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -110,6 +115,7 @@ class Sellers implements SellerQueryInterface
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->sellerFrontendRepository = $sellersFrontendRepository;
     }
 
     /**
@@ -146,6 +152,8 @@ class Sellers implements SellerQueryInterface
                 $data['store_id'] = implode(',',$data['store_id']);
             }
             $args['seller_id'] = $val->getData('seller_id');
+            $sellerRates = $this->sellerFrontendRepository->getSellersRating($data['seller_id']);
+            $data['seller_rates'] = $sellerRates;
             $data['products'] = $this->getResult( $args, $info, $context);
             $items[] = $data;
         }
