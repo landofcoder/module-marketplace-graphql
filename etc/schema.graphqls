@@ -53,6 +53,11 @@ type Query {
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
 }
 
+type Mutation {
+
+    LofMkpCreateSeller(input: SellerInput!): Seller @resolver(class: "\\Lof\\MarketPlaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Create a new Seller")
+
+}
 
 type SellerRate {
     rating_id: Int @doc(description: "Rating ID")
@@ -232,3 +237,13 @@ input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, us
     or: ProductFilterInput @doc(description: "The keyword required to perform a logical OR comparison.")
 }
 
+input SellerInput {
+    category_id  : String  @doc(description: "category_id.")
+    product_id  : [String]  @doc(description: "product_id.")
+    subject  : String  @doc(description: "subject.")
+    description  : String  @doc(description: "description.")
+    priority_id  : String  @doc(description: "priority.")
+    order_id  : String  @doc(description: "order_id.")
+    attachment : String  @doc(description: "attachment.")
+    attachment_name : String  @doc(description: "attachment_name.")
+}
