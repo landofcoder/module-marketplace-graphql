@@ -53,6 +53,13 @@ type Query {
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes")
 }
 
+type Mutation {
+
+    LofMkpCreateSeller(input: SellerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Create a new Seller")
+
+    LofMkpCreateCustomerSeller(input: SellerCustomerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateCustomerSeller") @doc(description: "Create a new Seller before create customer account")
+
+}
 
 type SellerRate {
     rating_id: Int @doc(description: "Rating ID")
@@ -159,6 +166,11 @@ type SellerProduct {
     store_id: Int @doc(description: "Store Id")
 }
 
+type Res {
+    code: String
+    message: String
+}
+
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
@@ -230,5 +242,34 @@ input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, us
     custom_layout: FilterTypeInput @doc(description: "The name of a custom layout.")
     gift_message_available: FilterTypeInput @doc(description: "Indicates whether a gift message is available.")
     or: ProductFilterInput @doc(description: "The keyword required to perform a logical OR comparison.")
+}
+
+input SellerCustomerInput {
+    seller: SellerInput!
+    customer: CustomerDataInput!
+    password: String!
+    or: SellerCustomerInput
+}
+
+input SellerInput {
+    group_id  : String!
+    url_key  : String!
+}
+
+input CustomerDataInput {
+    firstname: String!
+    lastname: String!
+    email: String!
+    address: AddressInput
+}
+
+input AddressInput {
+    region_id: String
+    country_id: String!
+    city: String!
+    street: String
+    company: String
+    telephone: String
+    or: AddressInput
 }
 
