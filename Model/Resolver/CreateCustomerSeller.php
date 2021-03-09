@@ -90,8 +90,10 @@ class CreateCustomerSeller implements ResolverInterface
         $data['group'] = $data['group_id'];
         $addressInterface = $this->addressInterface;
         $addressInterface->setCountryId($address['country_id'])
-            ->setRegionId($address['region_id'])
             ->setCity($address['city']);
+        if (isset($address['region_id'])) {
+            $addressInterface->setRegionId($address['region_id']);
+        }
         $addressArr[] = $addressInterface;
         $customerInterface = $this->customerInterface;
         $customerInterface->setFirstname($customer['firstname'])

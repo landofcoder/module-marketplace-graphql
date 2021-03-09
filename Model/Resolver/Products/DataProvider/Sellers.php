@@ -16,6 +16,8 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
@@ -124,7 +126,7 @@ class Sellers implements SellerQueryInterface
      * @param ResolveInfo $info
      * @param ContextInterface $context
      * @return SellerInterface|SellersSearchResultsInterface
-     * @throws InputException|\Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException|LocalizedException
      */
     public function getListSellers
     (
@@ -147,9 +149,6 @@ class Sellers implements SellerQueryInterface
                 $data["thumbnail"] = $this->_storeManager->getStore()->getBaseUrl(
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     ) . $data["thumbnail"];
-            }
-            if(isset($data['store_id']) && $data['store_id']) {
-                $data['store_id'] = implode(',',$data['store_id']);
             }
             $args['seller_id'] = $val->getData('seller_id');
             $sellerRates = $this->sellerFrontendRepository->getSellersRating($data['seller_id']);
