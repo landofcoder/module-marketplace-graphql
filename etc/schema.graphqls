@@ -267,9 +267,10 @@ input AddressInput {
     region_id: String
     country_id: String!
     city: String!
-    street: String
+    street: String!
     company: String
-    telephone: String
+    telephone: String!
+    postcode: String!
     or: AddressInput
 }
 
