@@ -88,9 +88,15 @@ class CreateCustomerSeller implements ResolverInterface
 
         $data['url_key'] = $this->url->formatUrlKey($data['url_key']);
         $data['group'] = $data['group_id'];
+        $data['country'] = $address['country_id'];
         $addressInterface = $this->addressInterface;
         $addressInterface->setCountryId($address['country_id'])
-            ->setCity($address['city']);
+            ->setCity($address['city'])
+            ->setStreet([$address['street']])
+            ->setTelephone($address['telephone'])
+            ->setPostcode($address['postcode'])
+            ->setFirstname($customer['firstname'])
+            ->setLastname($customer['lastname']);
         if (isset($address['region_id'])) {
             $addressInterface->setRegionId($address['region_id']);
         }
