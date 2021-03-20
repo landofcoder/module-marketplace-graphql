@@ -77,14 +77,12 @@ class Search implements ProductQueryInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
+
     /**
-     * Return product search results using Search API
-     *
      * @param array $args
      * @param ResolveInfo $info
      * @param ContextInterface $context
      * @return SearchResult
-     * @throws InputException
      */
     public function getResult(
         array $args,
