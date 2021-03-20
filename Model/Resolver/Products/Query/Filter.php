@@ -124,6 +124,7 @@ class Filter implements ProductQueryInterface
      * @param array $args
      * @param ResolveInfo $info
      * @return SearchCriteriaInterface
+     * @throws InputException
      */
     private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
     {
