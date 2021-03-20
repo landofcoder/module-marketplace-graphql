@@ -166,7 +166,6 @@ type SellerProduct {
     store_id: Int @doc(description: "Store Id")
 }
 
-
 type Res {
     code: String
     message: String
