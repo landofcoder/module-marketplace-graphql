@@ -57,6 +57,8 @@ type Mutation {
 
     LofMkpCreateSeller(input: SellerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Create a new Seller")
 
+    LofMkpReviewSeller(input: ReviewInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
+
     LofMkpCreateCustomerSeller(input: SellerCustomerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateCustomerSeller") @doc(description: "Create a new Seller before create customer account")
 
 }
@@ -68,6 +70,7 @@ type SellerRate {
     rate1: Int @doc(description: "Rate 1")
     rate2: Int @doc(description: "Rate 2")
     rate3: Int @doc(description: "Rate 3")
+    rating: Int @doc(description: "Total Rate")
     email: String @doc(description: "Email")
     title: String @doc(description: "Title")
     status: String @doc(description: "Status")
@@ -175,42 +178,45 @@ interface ProductInterface {
     seller: Seller @doc(description: "Seller who sell this product") @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductAttributeSetSellerResolver")
 }
 
-input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, use @ProductAttributeFilterInput instead. ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
-    name: FilterTypeInput @doc(description: "The product name. Customers use this name to identify the product.")
-    sku: FilterTypeInput @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
-    description: FilterTypeInput @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
-    short_description: FilterTypeInput @doc(description: "A short description of the product. Its use depends on the theme.")
-    price: FilterTypeInput @doc(description: "The price of an item.")
-    special_price: FilterTypeInput @doc(description: "The discounted price of the product. Do not include the currency code.")
-    special_from_date: FilterTypeInput @doc(description: "The beginning date that a product has a special price.")
-    special_to_date: FilterTypeInput @doc(description: "The end date that a product has a special price.")
-    weight: FilterTypeInput @doc(description: "The weight of the item, in units defined by the store.")
-    manufacturer: FilterTypeInput @doc(description: "A number representing the product's manufacturer.")
-    meta_title: FilterTypeInput @doc(description: "A string that is displayed in the title bar and tab of the browser and in search results lists.")
-    meta_keyword: FilterTypeInput @doc(description: "A comma-separated list of keywords that are visible only to search engines.")
-    meta_description: FilterTypeInput @doc(description: "A brief overview of the product for search results listings, maximum 255 characters.")
-    image: FilterTypeInput @doc(description: "The relative path to the main image on the product page.")
-    small_image: FilterTypeInput @doc(description: "The relative path to the small image, which is used on catalog pages.")
-    thumbnail: FilterTypeInput @doc(description: "The relative path to the product's thumbnail image.")
-    tier_price: FilterTypeInput @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
-    news_from_date: FilterTypeInput @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.")
-    news_to_date: FilterTypeInput @doc(description: "The end date for new product listings.")
-    custom_layout_update: FilterTypeInput @doc(description: "XML code that is applied as a layout update to the product page.")
-    min_price: FilterTypeInput @doc(description:"The numeric minimal price of the product. Do not include the currency code.")
-    max_price: FilterTypeInput @doc(description:"The numeric maximal price of the product. Do not include the currency code.")
-    category_id: FilterTypeInput @doc(description: "Category ID the product belongs to.")
-    options_container: FilterTypeInput @doc(description: "If the product has multiple options, determines where they appear on the product page.")
-    required_options: FilterTypeInput @doc(description: "Indicates whether the product has required options.")
-    has_options: FilterTypeInput @doc(description: "Indicates whether additional attributes have been created for the product.")
-    image_label: FilterTypeInput @doc(description: "The label assigned to a product image.")
-    small_image_label: FilterTypeInput @doc(description: "The label assigned to a product's small image.")
-    thumbnail_label: FilterTypeInput @doc(description: "The label assigned to a product's thumbnail image.")
-    created_at: FilterTypeInput @doc(description: "Timestamp indicating when the product was created.")
-    updated_at: FilterTypeInput @doc(description: "Timestamp indicating when the product was updated.")
-    country_of_manufacture: FilterTypeInput @doc(description: "The product's country of origin.")
-    custom_layout: FilterTypeInput @doc(description: "The name of a custom layout.")
-    gift_message_available: FilterTypeInput @doc(description: "Indicates whether a gift message is available.")
-    or: ProductFilterInput @doc(description: "The keyword required to perform a logical OR comparison.")
+input SellerCustomerInput {
+    seller: SellerInput!
+    customer: CustomerDataInput!
+    password: String!
+    or: SellerCustomerInput
+}
+
+input SellerInput {
+    group_id  : String!
+    url_key  : String!
+}
+
+input ReviewInput {
+    seller_id  : String!
+    rate1  : Int!
+    rate2  : Int!
+    rate3  : Int!
+    nickname  : String!
+    email  : String!
+    title  : String!
+    detail  : String!
+}
+
+input CustomerDataInput {
+    firstname: String!
+    lastname: String!
+    email: String!
+    address: AddressInput
+}
+
+input AddressInput {
+    region_id: String
+    country_id: String!
+    city: String!
+    street: String!
+    company: String
+    telephone: String!
+    postcode: String!
+    or: AddressInput
 }
 
 input SellerCustomerInput {
