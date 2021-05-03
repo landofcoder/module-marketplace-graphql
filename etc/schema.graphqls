@@ -219,3 +219,33 @@ input AddressInput {
     or: AddressInput
 }
 
+input SellerCustomerInput {
+    seller: SellerInput!
+    customer: CustomerDataInput!
+    password: String!
+    or: SellerCustomerInput
+}
+
+input SellerInput {
+    group_id  : String!
+    url_key  : String!
+}
+
+input CustomerDataInput {
+    firstname: String!
+    lastname: String!
+    email: String!
+    address: AddressInput
+}
+
+input AddressInput {
+    region_id: String
+    country_id: String!
+    city: String!
+    street: String!
+    company: String
+    telephone: String!
+    postcode: String!
+    or: AddressInput
+}
+
