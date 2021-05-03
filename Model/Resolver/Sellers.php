@@ -23,6 +23,14 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface {
      */
     private $sellers;
 
+    /**
+     * Sellers constructor.
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SellersFrontendRepositoryInterface $seller
+     * @param SellerProductsRepositoryInterface $productSeller
+     * @param ProductRepositoryInterface $productRepository
+     * @param Products\Query\SellerQueryInterface $sellers
+     */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,

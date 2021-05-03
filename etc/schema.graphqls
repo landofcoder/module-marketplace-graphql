@@ -57,6 +57,8 @@ type Mutation {
 
     LofMkpCreateSeller(input: SellerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Create a new Seller")
 
+    LofMkpReviewSeller(input: ReviewInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
+
     LofMkpCreateCustomerSeller(input: SellerCustomerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateCustomerSeller") @doc(description: "Create a new Seller before create customer account")
 
 }
@@ -68,6 +70,7 @@ type SellerRate {
     rate1: Int @doc(description: "Rate 1")
     rate2: Int @doc(description: "Rate 2")
     rate3: Int @doc(description: "Rate 3")
+    rating: Int @doc(description: "Total Rate")
     email: String @doc(description: "Email")
     title: String @doc(description: "Title")
     status: String @doc(description: "Status")
@@ -185,6 +188,17 @@ input SellerCustomerInput {
 input SellerInput {
     group_id  : String!
     url_key  : String!
+}
+
+input ReviewInput {
+    seller_id  : String!
+    rate1  : Int!
+    rate2  : Int!
+    rate3  : Int!
+    nickname  : String!
+    email  : String!
+    title  : String!
+    detail  : String!
 }
 
 input CustomerDataInput {

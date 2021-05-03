@@ -38,6 +38,13 @@ class CreateSeller implements ResolverInterface
      */
     private $sellerInterface;
 
+    /**
+     * CreateSeller constructor.
+     * @param DataProvider\CreateSeller $createSeller
+     * @param GetCustomer $getCustomer
+     * @param SellerInterface $sellerInterface
+     * @param Url $url
+     */
     public function __construct(
         DataProvider\CreateSeller $createSeller,
         GetCustomer $getCustomer,
