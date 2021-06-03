@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketPlaceGraphQl
+ * @package    Lof_MarketplaceGraphQl
  * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
@@ -22,8 +22,6 @@
 declare(strict_types=1);
 
 namespace Lof\MarketplaceGraphQl\Model\Resolver\DataProvider;
-
-
 
 use Lof\MarketPlace\Api\SellersRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -50,7 +48,6 @@ class CreateSeller
         SellersRepositoryInterface $sellersRepository
     ) {
         $this->sellerRepository = $sellersRepository;
-
     }
 
     /**
@@ -59,7 +56,8 @@ class CreateSeller
      * @return mixed
      * @throws LocalizedException
      */
-    public function createSeller($data, $customerId){
+    public function createSeller($data, $customerId)
+    {
         return $this->sellerRepository->saveSeller($data, $customerId);
     }
 
@@ -72,7 +70,8 @@ class CreateSeller
      * @throws LocalizedException
      * @throws InputMismatchException
      */
-    public function registerSeller(CustomerInterface $customer, $data, $password){
+    public function registerSeller(CustomerInterface $customer, $data, $password)
+    {
         return $this->sellerRepository->registerNewSeller($customer, $data, $password);
     }
 }

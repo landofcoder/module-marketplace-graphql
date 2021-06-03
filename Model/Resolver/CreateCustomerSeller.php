@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketPlaceGraphQl
+ * @package    Lof_MarketplaceGraphQl
  * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
@@ -32,7 +32,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Catalog\Model\Product\Url;
-
 
 /**
  * Class CreateCustomerSeller
@@ -102,8 +101,10 @@ class CreateCustomerSeller implements ResolverInterface
         $address = $customer['address'];
 
         $customerCollection = $this->customerCollection->addFieldToFilter('email', $customer['email']);
-        if ($customerCollection->getData()){
-            throw new GraphQlInputException(__('A customer with the same email address already exists in an associated website.'));
+        if ($customerCollection->getData()) {
+            throw new GraphQlInputException(
+                __('A customer with the same email address already exists in an associated website.')
+            );
         }
 
         $data['url_key'] = $this->url->formatUrlKey($data['url_key']);
@@ -128,6 +129,4 @@ class CreateCustomerSeller implements ResolverInterface
             ->setAddresses($addressArr);
         return $this->_createSeller->registerSeller($customerInterface, $data, $password);
     }
-
-
 }

@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketPlaceGraphQl
+ * @package    Lof_MarketplaceGraphQl
  * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
@@ -30,14 +30,15 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerById extends AbstractSellerQuery implements ResolverInterface {
+class SellerById extends AbstractSellerQuery implements ResolverInterface
+{
     /**
      * @inheritDoc
      */
-    public function resolve( Field $field, $context, ResolveInfo $info, array $value = null, array $args = null )
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $this->_labelFlag = 1;
-        $this->validateArgs( $args );
+        $this->validateArgs($args);
 
         return $this->_sellerRepository->getById($args['seller_id']);
     }

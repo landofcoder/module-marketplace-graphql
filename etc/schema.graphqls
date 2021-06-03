@@ -61,6 +61,8 @@ type Mutation {
 
     LofMkpCreateCustomerSeller(input: SellerCustomerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateCustomerSeller") @doc(description: "Create a new Seller before create customer account")
 
+    LofMkpCustomerSendMessageSeller(input: CustomerMessageInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CustomerSendMessageSeller") @doc(description: "Customer send message to seller")
+
 }
 
 type SellerRate {
@@ -249,3 +251,7 @@ input AddressInput {
     or: AddressInput
 }
 
+input CustomerMessageInput {
+    seller_id  : String!
+    content  : String!
+}
