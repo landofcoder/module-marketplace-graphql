@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketPlaceGraphQl
+ * @package    Lof_MarketplaceGraphQl
  * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
@@ -35,7 +35,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class Sellers extends AbstractSellerQuery implements ResolverInterface {
+class Sellers extends AbstractSellerQuery implements ResolverInterface
+{
 
     /**
      * @var SellersFrontendRepositoryInterface
@@ -56,8 +57,7 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface {
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
         Products\Query\SellerQueryInterface $sellers
-    )
-    {
+    ) {
         $this->sellers = $sellers;
         parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
     }
@@ -71,17 +71,16 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface {
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    )
-    {
+    ) {
         if ($args['currentPage'] < 1) {
             throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
         }
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
-        $searchCriteria = $this->searchCriteriaBuilder->build( 'lof_marketplace_seller', $args );
-        $searchCriteria->setCurrentPage( $args['currentPage'] );
-        $searchCriteria->setPageSize( $args['pageSize'] );
+        $searchCriteria = $this->searchCriteriaBuilder->build('lof_marketplace_seller', $args);
+        $searchCriteria->setCurrentPage($args['currentPage']);
+        $searchCriteria->setPageSize($args['pageSize']);
 
         $searchResult = $this->sellers->getListSellers($searchCriteria, $args, $info, $context);
 
