@@ -29,6 +29,11 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Exception\InputException;
+use Magento\Search\Model\Query;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
 
 /**
  * Class Sellers
@@ -44,21 +49,34 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
     private $sellers;
 
     /**
+     * @var string
+     */
+    private const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Sellers constructor.
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SellersFrontendRepositoryInterface $seller
      * @param SellerProductsRepositoryInterface $productSeller
      * @param ProductRepositoryInterface $productRepository
      * @param Products\Query\SellerQueryInterface $sellers
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
-        Products\Query\SellerQueryInterface $sellers
+        Products\Query\SellerQueryInterface $sellers,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->sellers = $sellers;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
     }
 
@@ -78,6 +96,8 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
+        $store = $context->getExtensionAttributes()->getStore();
+        $args[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($args['filters'], $store);
         $searchCriteria = $this->searchCriteriaBuilder->build('lof_marketplace_seller', $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
@@ -88,5 +108,43 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
             'total_count' => $searchResult->getTotalCount(),
             'items'       => $searchResult->getItems(),
         ];
+    }
+
+    /**
+     * Format match filters to behave like fuzzy match
+     *
+     * @param array $filters
+     * @param StoreInterface $store
+     * @return array
+     * @throws InputException
+     */
+    private function formatMatchFilters(array $filters, StoreInterface $store): array
+    {
+        $minQueryLength = $this->scopeConfig->getValue(
+            Query::XML_PATH_MIN_QUERY_LENGTH,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        $availableMatchFilters = ["store_id"];
+        foreach ($filters as $filter => $condition) {
+            $conditionType = current(array_keys($condition));
+            $tmpminQueryLength = $minQueryLength;
+            if(in_array($filter, $availableMatchFilters)){
+                $tmpminQueryLength = 1;
+            }
+            if ($conditionType === 'match') {
+                $searchValue = trim(str_replace(self::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
+                $matchLength = strlen($searchValue);
+                if ($matchLength < $tmpminQueryLength) {
+                    throw new InputException(__('Invalid match filter. Minimum length is %1.', $tmpminQueryLength));
+                }
+                unset($filters[$filter]['match']);
+                if($filter == "store_id"){
+                    $searchValue = (int)$searchValue;
+                }
+                $filters[$filter]['like'] = '%' . $searchValue . '%';
+            }
+        }
+        return $filters;
     }
 }
