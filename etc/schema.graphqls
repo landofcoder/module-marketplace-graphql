@@ -20,6 +20,29 @@ enum UrlRewriteEntityTypeEnum {
     LOF_MARKETPLACE
 }
 
+
+type StoreConfig {
+    
+    lofmarketplace_general_enable  : String  @doc(description: "Query by lofmarketplace_general_enable.")
+    lofmarketplace_general_rating_approval  : String  @doc(description: "Query by lofmarketplace_general_rating_approval.")
+    lofmarketplace_general_seller_approval  : String  @doc(description: "Query by lofmarketplace_general_seller_approval.") 
+    lofmarketplace_product_view_seller_info  : String  @doc(description: "Query by lofmarketplace_product_view_seller_info.") 
+    lofmarketplace_product_view_seller_name  : String  @doc(description: "Query by lofmarketplace_product_view_seller_name.")
+    lofmarketplace_product_view_seller_image  : String  @doc(description: "Query by lofmarketplace_product_view_seller_image.")
+    lofmarketplace_product_view_seller_address  : String  @doc(description: "Query by lofmarketplace_product_view_seller_address.") 
+    lofmarketplace_product_view_seller_sale  : String  @doc(description: "Query by lofmarketplace_product_view_seller_sale.") 
+    lofmarketplace_product_view_seller_phone  : String  @doc(description: "Query by lofmarketplace_product_view_seller_phone.") 
+    lofmarketplace_product_view_seller_contact  : String  @doc(description: "Query by lofmarketplace_product_view_seller_contact.") 
+    lofmarketplace_product_view_seller_contact_text  : String  @doc(description: "Query by lofmarketplace_product_view_seller_contact_text.") 
+    lofmarketplace_list_show_seller_name  : String  @doc(description: "Query by lofmarketplace_list_show_seller_name.") 
+    lofmarketplace_list_item_per_page  : String  @doc(description: "Query by lofmarketplace_list_item_per_page.") 
+    lofmarketplace_list_page_title  : String  @doc(description: "Query by lofmarketplace_list_page_title.") 
+    lofmarketplace_list_meta_description  : String  @doc(description: "Query by lofmarketplace_list_meta_description.") 
+    lofmarketplace_list_meta_keywords  : String  @doc(description: "Query by lofmarketplace_list_meta_keywords.") 
+    lofmarketplace_group_show_seller_name  : String  @doc(description: "Query by lofmarketplace_group_show_seller_name.") 
+    lofmarketplace_group_item_per_page  : String  @doc(description: "Query by lofmarketplace_group_item_per_page.")
+}
+
 type Query {
     lofSellerById(
         seller_id: Int! @doc(description: "Seller id")

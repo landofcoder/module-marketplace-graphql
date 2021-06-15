@@ -40,6 +40,6 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface
         $this->_labelFlag = 1;
         $this->validateArgs($args);
 
-        return $this->_sellerRepository->getById($args['seller_id']);
+        return $this->_sellerRepository->get($args['seller_id']);
     }
 }

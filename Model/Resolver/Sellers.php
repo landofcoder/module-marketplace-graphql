@@ -30,6 +30,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Search\Model\Query;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -102,11 +103,11 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
 
-        $searchResult = $this->sellers->getListSellers($searchCriteria, $args, $info, $context);
+        $searchResult = $this->_sellerRepository->getList($searchCriteria);
 
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items'       => $searchResult->getItems(),
+            'items'       => $searchResult->getItems()
         ];
     }
 

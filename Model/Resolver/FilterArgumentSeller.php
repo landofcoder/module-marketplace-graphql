@@ -52,7 +52,7 @@ class FilterArgumentSeller implements FieldEntityAttributesInterface
     {
         $fields = [];
         /** @var Field $field */
-        foreach ($this->config->getConfigElement('Seller')->getFields() as $field) {
+        foreach ($this->config->getConfigElement('SellerFilterInput')->getFields() as $field) {
             $fields[$field->getName()] = [
                 'type' => 'String',
                 'fieldName' => $field->getName(),
