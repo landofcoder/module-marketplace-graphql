@@ -78,6 +78,25 @@ class SellerByProduct extends AbstractSellerQuery implements ResolverInterface {
         }
         $productId = $this->product->get($args['product_sku'])->getId();
 
-        return $this->_sellerRepository->getSellersbyProductID($productId);
+        $sellerData = $this->_sellerRepository->getSellersbyProductID($productId);
+
+        if($sellerData){
+            $products = $sellerData->getProducts();
+            if($items = $products->getItems()){
+                $productArray = [];
+                /** @var \Magento\Catalog\Model\Product $product */
+                foreach ($items as $product) {
+                    $productArray[$product->getId()] = $product->load($product->getId())->getData();
+                    $productArray[$product->getId()]['model'] = $product;
+                }
+
+                $newProducts =[
+                                'total_count' => $products->getTotalCount(),
+                                'items' => $productArray
+                                ];
+                $sellerData->setProducts($newProducts);
+            }
+        }
+        return $sellerData?$sellerData->__toArray():[];
     }
 }
