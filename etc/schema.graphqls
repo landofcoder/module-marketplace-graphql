@@ -261,7 +261,7 @@ type SellerProduct {
 
 type SellerGroup {
     group_id: Int @doc(description: "Group Id")
-    name: String @doc(description: "name") 
+    name: String @doc(description: "name")
     url_key: String @doc(description: "url_key")
     status: Int @doc(description: "Status")
     position: Int @doc(description: "position")
