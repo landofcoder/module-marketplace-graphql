@@ -98,23 +98,35 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
         $store = $context->getExtensionAttributes()->getStore();
-        $args[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($args['filters'], $store);
+        $args[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($args['filter'], $store);
         $searchCriteria = $this->searchCriteriaBuilder->build('lof_marketplace_seller', $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
 
-        $searchResult = $this->_sellerRepository->getList($searchCriteria);
-
+        $searchResult = $this->sellers->getListSellers($searchCriteria, $args, $info, $context);
+        $totalPages = $args['pageSize'] ? ((int)ceil($searchResult->getTotalCount() / $args['pageSize'])) : 0;
+        $resultItems = $searchResult->getItems();
+        // $items = [];
+        // if($resultItems){
+        //     foreach($resultItems as $_item){
+        //         $items[] = $_item->__toArray();
+        //     }
+        // }
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items'       => $searchResult->getItems()
+            'items'       => $resultItems,
+            'page_info' => [
+                'page_size' => $args['pageSize'],
+                'current_page' => $args['currentPage'],
+                'total_pages' => $totalPages
+            ]
         ];
     }
 
     /**
-     * Format match filters to behave like fuzzy match
+     * Format match filter to behave like fuzzy match
      *
-     * @param array $filters
+     * @param array $filter
      * @param StoreInterface $store
      * @return array
      * @throws InputException

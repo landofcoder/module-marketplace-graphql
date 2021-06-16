@@ -20,7 +20,10 @@
 				<item name="lofmarketplace_list_meta_description" xsi:type="string">lofmarketplace/seller_list_page/meta_description</item>
 				<item name="lofmarketplace_list_meta_keywords" xsi:type="string">lofmarketplace/seller_list_page/meta_keywords</item>
 				<item name="lofmarketplace_group_show_seller_name" xsi:type="string">lofmarketplace/group_page/show_seller_name</item>
-				<item name="lofmarketplace_group_item_per_page" xsi:type="string">lofmarketplace/group_page/item_per_page</item>
+				<item name="lofmarketplace_group_seller_enable" xsi:type="string">lofmarketplace/group_seller/enable_group_seller</item>
+				<item name="lofmarketplace_group_seller_available" xsi:type="string">lofmarketplace/group_seller/group_seller</item>
+				<item name="lofmarketplace_available_countries_enable" xsi:type="string">lofmarketplace/available_countries/enable_available_countries</item>
+				<item name="lofmarketplace_available_countries" xsi:type="string">lofmarketplace/available_countries/available_countries</item>
 			</argument>
 		</arguments>
 	</type>

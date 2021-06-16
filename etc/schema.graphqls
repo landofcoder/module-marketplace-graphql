@@ -41,6 +41,10 @@ type StoreConfig {
     lofmarketplace_list_meta_keywords  : String  @doc(description: "Query by lofmarketplace_list_meta_keywords.") 
     lofmarketplace_group_show_seller_name  : String  @doc(description: "Query by lofmarketplace_group_show_seller_name.") 
     lofmarketplace_group_item_per_page  : String  @doc(description: "Query by lofmarketplace_group_item_per_page.")
+    lofmarketplace_group_seller_enable : String  @doc(description: "Query by lofmarketplace_group_seller_enable.")
+    lofmarketplace_group_seller_available : String  @doc(description: "Query by lofmarketplace_group_seller_available.")
+    lofmarketplace_available_countries_enable : String  @doc(description: "Query by lofmarketplace_available_countries_enable.")
+    lofmarketplace_available_countries : String  @doc(description: "Query by lofmarketplace_available_countries.")
 }
 
 type Query {
@@ -120,6 +124,7 @@ type Seller {
     city: String @doc(description: "City")
     region: String @doc(description: "Region")
     group: String @doc(description: "Group")
+    group_id: Int @doc(description: "Group")
     url: String @doc(description: "Shop Url")
     customer_id: Int @doc(description: "Customer Id")
     email: String @doc(description: "Email")
