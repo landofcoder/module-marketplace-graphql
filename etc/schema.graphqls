@@ -79,6 +79,13 @@ type Query {
        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
        sort: SellerSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\Identity")
+
+   lofSellerGroups(
+       filter: SellerGroupFilterInput @doc(description: "Identifies which question attributes to search for and return."),
+       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+       sort: SellerGroupSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
+   ):SellerGroups @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerGroups") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerGroups\\Identity")
 }
 
 type Mutation {
@@ -167,6 +174,8 @@ type Seller {
 type Sellers {
     total_count: Int @doc(description: "The number of sellers returned")
     items: [Seller] @doc(description: "An array of sellers that match the specified search criteria")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
+    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketPlace\\Model\\Resolver\\Sellers\\SortFields")
 }
 
 type Products {
@@ -194,6 +203,15 @@ input SellerSortInput @doc(description: "SellerSortInput specifies the attribute
     status: SortEnum @doc(description: "Sort by the status assigned to each seller.")
 }
 
+input SellerGroupSortInput @doc(description: "SellerGroupSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order. It's possible to sort sellers using searchable attributes with enabled 'Use in Filter Options' option")
+{
+    position: SortEnum @doc(description: "Sort by the position (position).")
+    name: SortEnum @doc(description: "Sort by the name assigned to each seller.")
+    group_id: SortEnum @doc(description: "Sort by the group_id assigned to each seller.")
+    shown_in_sidebar: SortEnum @doc(description: "Sort by the shown_in_sidebar assigned to each seller.")
+    status: SortEnum @doc(description: "Sort by the status assigned to each seller.")
+}
+
 input SellerFilterInput {
     seller_id: FilterTypeInput @doc(description: "Seller ID")
     name: FilterTypeInput @doc(description: "Name")
@@ -208,6 +226,16 @@ input SellerFilterInput {
     city: FilterTypeInput @doc(description: "city")
     region: FilterTypeInput @doc(description: "region")
     or: SellerFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
+}
+
+input SellerGroupFilterInput {
+    group_id: FilterTypeInput @doc(description: "Seller Group ID")
+    name: FilterTypeInput @doc(description: "Name")
+    status: FilterTypeInput @doc(description: "Status")
+    url_key: FilterTypeInput @doc(description: "Url_key")
+    position: FilterTypeInput @doc(description: "position")
+    show_in_sidebar: FilterTypeInput @doc(description: "show_in_sidebar")
+    or: SellerGroupFilterInput @doc(description: "The keyword required to perform a logical OR comparison")
 }
 
 input SellerProductFilterInput {
@@ -229,6 +257,25 @@ type SellerProduct {
     product_name: String @doc(description: "Product Name")
     status: Int @doc(description: "Status")
     store_id: Int @doc(description: "Store Id")
+}
+
+type SellerGroup {
+    group_id: Int @doc(description: "Group Id")
+    name: String @doc(description: "name") 
+    url_key: String @doc(description: "url_key")
+    status: Int @doc(description: "Status")
+    position: Int @doc(description: "position")
+    can_add_product: Int @doc(description: "can_add_product")
+    can_use_message: Int @doc(description: "can_use_message")
+    can_use_vacation: Int @doc(description: "can_use_vacation")
+    can_use_withdrawal: Int @doc(description: "can_use_withdrawal")
+}
+
+type SellerGroups {
+    total_count: Int @doc(description: "The number of sellers returned")
+    items: [SellerGroup] @doc(description: "An array of sellers that match the specified search criteria")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
+    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketPlace\\Model\\Resolver\\Sellers\\SortFields")
 }
 
 type Res {
@@ -314,4 +361,13 @@ input AddressInput {
 input CustomerMessageInput {
     seller_id  : String!
     content  : String!
+}
+
+type SortField {
+    value: String @doc(description: "Attribute code of sort field.")
+    label: String @doc(description: "Label of sort field.")
+}
+type SortFields @doc(description: "SortFields contains a default value for sort fields and all available sort fields.") {
+    default: String @doc(description: "Default value of sort fields.")
+    options: [SortField] @doc(description: "Available sort fields.")
 }
