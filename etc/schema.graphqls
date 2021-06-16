@@ -175,7 +175,7 @@ type Sellers {
     total_count: Int @doc(description: "The number of sellers returned")
     items: [Seller] @doc(description: "An array of sellers that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
-    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketPlace\\Model\\Resolver\\Sellers\\SortFields")
+    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\SortFields")
 }
 
 type Products {
@@ -275,7 +275,7 @@ type SellerGroups {
     total_count: Int @doc(description: "The number of sellers returned")
     items: [SellerGroup] @doc(description: "An array of sellers that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
-    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketPlace\\Model\\Resolver\\Sellers\\SortFields")
+    sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\SortFields")
 }
 
 type Res {
