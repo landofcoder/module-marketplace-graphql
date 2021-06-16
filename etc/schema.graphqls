@@ -58,7 +58,7 @@ type Query {
 
     lofProductBySellerId(
         seller_id: Int! @doc(description: "Seller id")
-        search: String @doc(description: "Performs a full-text search using the specified key words."),
+        search: String = "" @doc(description: "Performs a full-text search using the specified key words."),
         filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
@@ -66,7 +66,7 @@ type Query {
     ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerId") @doc(description: "Get Product by Seller ID")
 
     lofProductList(
-        search: String @doc(description: "Performs a full-text search using the specified key words."),
+        search: String = "" @doc(description: "Performs a full-text search using the specified key words."),
         filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),

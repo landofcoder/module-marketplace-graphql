@@ -98,7 +98,9 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
         $store = $context->getExtensionAttributes()->getStore();
-        $args[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($args['filter'], $store);
+        if(isset($args['filter']) && $args['filter']){
+            $args[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($args['filter'], $store);
+        }
         $searchCriteria = $this->searchCriteriaBuilder->build('lof_marketplace_seller', $args);
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
