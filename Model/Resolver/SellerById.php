@@ -40,6 +40,24 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface
         $this->_labelFlag = 1;
         $this->validateArgs($args);
 
-        return $this->_sellerRepository->get($args['seller_id']);
+        $sellerData = $this->_sellerRepository->get($args['seller_id']);
+        if($sellerData){
+            $products = $sellerData->getProducts();
+            if($items = $products->getItems()){
+                $productArray = [];
+                /** @var \Magento\Catalog\Model\Product $product */
+                foreach ($items as $product) {
+                    $productArray[$product->getId()] = $product->load($product->getId())->getData();
+                    $productArray[$product->getId()]['model'] = $product;
+                }
+
+                $newProducts =[
+                                'total_count' => $products->getTotalCount(),
+                                'items' => $productArray
+                                ];
+                $sellerData->setProducts($newProducts);
+            }
+        }
+        return $sellerData?$sellerData->__toArray():[];
     }
 }

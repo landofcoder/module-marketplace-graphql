@@ -106,12 +106,6 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
         $searchResult = $this->sellers->getListSellers($searchCriteria, $args, $info, $context);
         $totalPages = $args['pageSize'] ? ((int)ceil($searchResult->getTotalCount() / $args['pageSize'])) : 0;
         $resultItems = $searchResult->getItems();
-        // $items = [];
-        // if($resultItems){
-        //     foreach($resultItems as $_item){
-        //         $items[] = $_item->__toArray();
-        //     }
-        // }
         return [
             'total_count' => $searchResult->getTotalCount(),
             'items'       => $resultItems,
