@@ -33,7 +33,7 @@ class Identity implements IdentityInterface
      * @param array $resolvedData
      * @return string[]
      */
-    public function getIdentities(array $resolvedData)
+    public function getIdentities(array $resolvedData): array
     {
         $ids =  empty($resolvedData['group_id']) ?
                         [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData['group_id'])];
