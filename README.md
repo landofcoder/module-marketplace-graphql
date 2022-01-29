@@ -35,8 +35,62 @@ magento 2 marketplace graphql extension
  - apply database updates by running `php bin/magento setup:upgrade`\*
  - Flush the cache by running `php bin/magento cache:flush`
 
+### TODO
+- Refactor Graphql queries
+- Refactor Resolvers
+- Add documendation for Graphql queries
 
-## Configuration
+## Queries
+
+1. Get Seller Profile Info By Id
+
+```
+{
+    lofSellerById(seller_id: Int!) {
+        address
+        banner_pic
+        city
+        commission_id
+        company_description
+        company_locality
+        contact_number
+        country
+        customer_id
+        email
+        gplus_active
+        gplus_id
+        group
+        image
+        name
+        page_layout
+        region
+        return_policy
+        sale
+        seller_id
+        shipping_policy
+        shop_title
+        status
+        store_id
+        thumbnail
+        seller_rates {
+            items {
+                created_at
+                customer_id
+                detail
+                email
+                nickname
+                rate1
+                rate2
+                rate3
+                rating_id
+                seller_id
+                status
+                title
+            }
+            total_count
+        }
+  }
+}
 
 
 
