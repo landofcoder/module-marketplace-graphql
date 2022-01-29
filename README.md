@@ -50,7 +50,6 @@ magento 2 marketplace graphql extension
         address
         banner_pic
         city
-        commission_id
         company_description
         company_locality
         contact_number
