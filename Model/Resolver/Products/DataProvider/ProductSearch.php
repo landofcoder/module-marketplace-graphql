@@ -36,6 +36,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -73,12 +74,18 @@ class ProductSearch
     private $searchCriteriaBuilder;
 
     /**
+     * @var OptionInterfaceFactory
+     */
+    private $optionFactory;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface $collectionPreProcessor
      * @param CollectionPostProcessor $collectionPostProcessor
      * @param SearchResultApplierFactory $searchResultsApplierFactory
      * @param ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
+     * @param OptionInterfaceFactory $optionFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -86,7 +93,8 @@ class ProductSearch
         CollectionProcessorInterface $collectionPreProcessor,
         CollectionPostProcessor $collectionPostProcessor,
         SearchResultApplierFactory $searchResultsApplierFactory,
-        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
+        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder,
+        OptionInterfaceFactory $optionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -94,6 +102,7 @@ class ProductSearch
         $this->collectionPostProcessor = $collectionPostProcessor;
         $this->searchResultApplierFactory = $searchResultsApplierFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->optionFactory = $optionFactory;
     }
 
     /**
@@ -129,7 +138,10 @@ class ProductSearch
                 if (get_class($_item) == "Smile\\ElasticsuiteCore\\Search\\Adapter\\Elasticsuite\\Response\\Document") {
                     $score = $_item->getCustomAttribute('score');
                     if (!$score) {
-                        $_item->setCustomAttribute('score', '');
+                        $scoreOption = $this->optionFactory->create();
+                        $scoreOption->setLabel("score");
+                        $scoreOption->setValue(1);
+                        $_item->setCustomAttribute('score', $scoreOption);
                     }
                     $items[] = $_item;
                 }
