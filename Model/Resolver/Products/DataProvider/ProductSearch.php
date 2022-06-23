@@ -123,11 +123,13 @@ class ProductSearch
         //Create a copy of search criteria without filters to preserve the results from search
         $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
         //Apply CatalogSearch results from search and join table
-        $this->getSearchResultsApplier(
-            $searchResult,
-            $collection,
-            $this->getSortOrderArray($searchCriteriaForCollection)
-        )->apply();
+        // $this->getSearchResultsApplier(
+        //     $searchResult,
+        //     $collection,
+        //     $this->getSortOrderArray($searchCriteriaForCollection)
+        // )->apply();
+
+        $collection->setFlag('search_resut_applied', true);
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
         $collection->load();
