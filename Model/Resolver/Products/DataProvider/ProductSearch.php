@@ -123,11 +123,27 @@ class ProductSearch
         //Create a copy of search criteria without filters to preserve the results from search
         $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
         //Apply CatalogSearch results from search and join table
-        // $this->getSearchResultsApplier(
-        //     $searchResult,
-        //     $collection,
-        //     $this->getSortOrderArray($searchCriteriaForCollection)
-        // )->apply();
+        if (!empty($searchResult) && $searchResult->getItems()) {
+            $items = [];
+            foreach ($searchResult->getItems() as $_item) {
+                if (get_class($_item) == "Smile\\ElasticsuiteCore\\Search\\Adapter\\Elasticsuite\\Response\\Document") {
+                    $score = $_item->getCustomAttribute('score');
+                    if (!$score) {
+                        $_item->setCustomAttribute('score', '');
+                    }
+                    $items[] = $_item;
+                }
+            }
+            if (!empty($items)) {
+                $searchResult->setItems($items);
+            }
+
+            $this->getSearchResultsApplier(
+                $searchResult,
+                $collection,
+                $this->getSortOrderArray($searchCriteriaForCollection)
+            )->apply();
+        }
 
         $collection->setFlag('search_resut_applied', true);
 
