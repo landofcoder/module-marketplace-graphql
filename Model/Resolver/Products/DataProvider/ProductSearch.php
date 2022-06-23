@@ -185,7 +185,6 @@ class ProductSearch
                 $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
             }
         }
-
         return $ordersArray;
     }
 }

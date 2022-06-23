@@ -166,7 +166,7 @@ class Sellers implements SellerQueryInterface
                     ) . $data["thumbnail"];
             }
             $args['seller_id'] = $val->getData('seller_id');
-            $sellerRates = $this->sellerFrontendRepository->getSellersRating($data['seller_id']);
+            $sellerRates = $this->sellerFrontendRepository->getSellersRating((int)$data['seller_id']);
             $data['seller_rates'] = $sellerRates;
             $data['group_id']  = $val->getGroupId();
             $data['group'] = $val->getSellerGroup();
