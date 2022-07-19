@@ -124,7 +124,7 @@ class Search implements ProductQueryInterface
                 $itemsResults,
                 $queryFields,
                 $context,
-                $args['seller_id']
+                (int)$args['seller_id']
             );
         } else {
             $searchResults = $this->productsProvider->getList(
