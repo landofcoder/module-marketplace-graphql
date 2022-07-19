@@ -36,6 +36,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Lof\MarketPlace\Model\SellerProduct;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -115,11 +116,17 @@ class ProductSearch
     ): SearchResultsInterface {
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
-        if($sellerId) {
+        if ($sellerId) {
             $collection->addFieldToFilter('seller_id', $sellerId);
         } else {
             $collection->addFieldToFilter('seller_id', ['neq' => 0]);
         }
+        $collection->addAttributeToFilter('approval',
+                        ['in' => [
+                            SellerProduct::STATUS_NOT_SUBMITED,
+                            SellerProduct::STATUS_APPROVED
+                        ]
+                    ]);
         //Create a copy of search criteria without filters to preserve the results from search
         $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
         //Apply CatalogSearch results from search and join table

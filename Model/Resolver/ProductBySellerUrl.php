@@ -26,6 +26,7 @@ use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
+use Lof\MarketPlace\Model\SellerFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
@@ -37,12 +38,22 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
+class ProductBySellerUrl extends AbstractSellerQuery implements ResolverInterface
 {
     /**
      * @var ProductQueryInterface
      */
     private $searchQuery;
+
+    /**
+     * @var mixed|array
+     */
+    protected $_sellers = [];
+
+    /**
+     * @var SellerFactory
+     */
+    protected $sellerFactory;
 
     /**
      * @inheritdoc
@@ -52,10 +63,12 @@ class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
-        ProductQueryInterface $searchQuery
+        ProductQueryInterface $searchQuery,
+        SellerFactory $sellerFactory
     )
     {
         $this->searchQuery = $searchQuery;
+        $this->sellerFactory = $sellerFactory;
         parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
     }
 
@@ -73,12 +86,18 @@ class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
         if ($args['pageSize'] < 1) {
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
-        if (!isset($args['seller_id'])) {
+        if (!isset($args['seller_url'])) {
             throw new GraphQlInputException(
-                __("'seller_id' input argument is required.")
+                __("'seller_url' input argument is required.")
             );
         }
-
+        $seller = $this->getSellerByUrl($args['seller_url']);
+        if (!$seller || ($seller && !$seller->getId())) {
+            throw new GraphQlInputException(
+                __("Seller %1 is not exists.", $args['seller_url'])
+            );
+        }
+        $args['seller_id'] = $seller->getId();
         $searchResult = $this->searchQuery->getResult($args, $info, $context);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
@@ -101,5 +120,23 @@ class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
             'search_result' => $searchResult,
             'layer_type' => isset($args['search']) ? Resolver::CATALOG_LAYER_SEARCH : Resolver::CATALOG_LAYER_CATEGORY,
         ];
+    }
+
+    /**
+     * get seller by sellerUrl
+     *
+     * @param string $sellerUrl
+     * @return \Lof\MarketPlace\Model\Seller
+     */
+    protected function getSellerByUrl(string $sellerUrl)
+    {
+        if (!isset($this->_sellers[$sellerUrl])) {
+            $seller = $this->sellerFactory->create()->getCollection()
+                    ->addFieldToFilter('url_key', ['eq' => $sellerUrl])
+                    ->addFieldToFilter("status", \Lof\MarketPlace\Model\Seller::STATUS_ENABLED)
+                    ->getFirstItem();
+            $this->_sellers[$sellerUrl] = $seller;
+        }
+        return $this->_sellers[$sellerUrl];
     }
 }

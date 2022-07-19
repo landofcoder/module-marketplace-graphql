@@ -19,7 +19,7 @@
  * @license    https://landofcoder.com/terms
  */
 
-namespace Lof\MarketplaceGraphQl\Model\Resolver\SellerById;
+namespace Lof\MarketplaceGraphQl\Model\Resolver\SellerByUrl;
 
 
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
@@ -35,8 +35,8 @@ class Identity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        $ids =  empty($resolvedData['seller_id']) ?
-                        [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData['seller_id'])];
+        $ids =  empty($resolvedData['seller_url']) ?
+                        [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData['seller_url'])];
 
                     return $ids;
     }

@@ -102,7 +102,7 @@ class Product
     ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('seller_id', ['neq'=>0]);
+        $collection->addFieldToFilter('seller_id', ['neq' => 0]);
         $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes, $context);
 
         if (!$isChildSearch) {
