@@ -45,7 +45,7 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
 {
 
     /**
-     * @var Products\Query\SellerQueryInterface
+     * @var SellersFrontendRepositoryInterface
      */
     private $sellers;
 
