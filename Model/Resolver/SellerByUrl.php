@@ -24,13 +24,14 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
- * Class SellerById
+ * Class SellerByUrl
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerById extends AbstractSellerQuery implements ResolverInterface
+class SellerByUrl extends AbstractSellerQuery implements ResolverInterface
 {
     /**
      * @inheritDoc
@@ -38,10 +39,13 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $this->_labelFlag = 1;
-        $this->validateArgs($args);
+        if (!isset($args['seller_url']) || (isset($args['seller_url']) && !$args['seller_url'])) {
+            throw new GraphQlInputException(__('seller_url is required.'));
+        }
+
         $isGetProducts = isset($args['get_products']) ? (bool)$args['get_products'] : false;
         $isGetOtherInfo = isset($args['get_other_info']) ? (bool)$args['get_other_info'] : false;
-        $sellerData = $this->_sellerRepository->get((int)$args['seller_id'], $isGetOtherInfo, $isGetProducts);
+        $sellerData = $this->_sellerRepository->getByUrl($args['seller_url'], $isGetOtherInfo, $isGetProducts);
         return $sellerData? $sellerData->__toArray() : [];
     }
 }

@@ -41,7 +41,6 @@ abstract class AbstractSellerQuery
      */
     protected $searchCriteriaBuilder;
 
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -55,11 +54,11 @@ abstract class AbstractSellerQuery
      * @var SellersFrontendRepositoryInterface
      */
     protected $_sellerRepository;
+
     /**
      * @var SellerProductsRepositoryInterface
      */
     protected $_productSeller;
-
 
     /**
      * AbstractSellerQuery constructor.

@@ -65,38 +65,13 @@ class SellerByProduct extends AbstractSellerQuery implements ResolverInterface {
      */
     public function resolve( Field $field, $context, ResolveInfo $info, array $value = null, array $args = null )
     {
-        if (!isset($args['product_sku'])) {
+        if (!isset($args['product_sku']) || (isset($args['product_sku']) && !$args['product_sku'])) {
             throw new GraphQlInputException(
                 __("'product_sku' input argument is required.")
             );
         }
-        $products = $this->productCollection->addFieldToFilter('sku',$args['product_sku']);
-        if (!count($products)) {
-            throw new GraphQlInputException(
-                __("product_sku does not math any product.")
-            );
-        }
-        $productId = $this->product->get($args['product_sku'])->getId();
 
-        $sellerData = $this->_sellerRepository->getSellersbyProductID($productId);
-
-        if($sellerData){
-            $products = $sellerData->getProducts();
-            if($items = $products->getItems()){
-                $productArray = [];
-                /** @var \Magento\Catalog\Model\Product $product */
-                foreach ($items as $product) {
-                    $productArray[$product->getId()] = $product->load($product->getId())->getData();
-                    $productArray[$product->getId()]['model'] = $product;
-                }
-
-                $newProducts =[
-                                'total_count' => $products->getTotalCount(),
-                                'items' => $productArray
-                                ];
-                $sellerData->setProducts($newProducts);
-            }
-        }
+        $sellerData = $this->_sellerRepository->getSellerByProductSku($args['product_sku']);
         return $sellerData?$sellerData->__toArray():[];
     }
 }

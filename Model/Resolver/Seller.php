@@ -15,9 +15,10 @@
  *
  * @category   Landofcoder
  * @package    Lof_MarketplaceGraphQl
- * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
+ * @copyright  Copyright (c) 2022 Landofcoder (https://landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
+declare(strict_types=1);
 
 namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
@@ -26,11 +27,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Class SellerById
+ * Class Seller
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerById extends AbstractSellerQuery implements ResolverInterface
+class Seller extends AbstractSellerQuery implements ResolverInterface
 {
     /**
      * @inheritDoc
@@ -39,9 +40,9 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface
     {
         $this->_labelFlag = 1;
         $this->validateArgs($args);
-        $isGetProducts = isset($args['get_products']) ? (bool)$args['get_products'] : false;
-        $isGetOtherInfo = isset($args['get_other_info']) ? (bool)$args['get_other_info'] : false;
-        $sellerData = $this->_sellerRepository->get((int)$args['seller_id'], $isGetOtherInfo, $isGetProducts);
-        return $sellerData? $sellerData->__toArray() : [];
+        $sellerData = $this->_sellerRepository->get($args['seller_id']);
+        $data = $sellerData ? $sellerData->__toArray() : [];
+        $data["model"] = $sellerData;
+        return $data;
     }
 }
