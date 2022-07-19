@@ -15,7 +15,7 @@
  *
  * @category   Landofcoder
  * @package    Lof_MarketplaceGraphQl
- * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
+ * @copyright  Copyright (c) 2022 Landofcoder (https://landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
 

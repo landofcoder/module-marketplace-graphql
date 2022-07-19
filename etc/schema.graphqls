@@ -20,7 +20,6 @@ enum UrlRewriteEntityTypeEnum {
     LOF_MARKETPLACE
 }
 
-
 type StoreConfig {
 
     lofmarketplace_general_enable  : String  @doc(description: "Query by lofmarketplace_general_enable.")
@@ -48,11 +47,11 @@ type StoreConfig {
 }
 
 type Query {
-    lofSellerById(
+    sellerById(
         seller_id: Int! @doc(description: "Seller id")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerById") @doc(description: "Get Seller by ID") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerById\\Identity")
 
-    lofSellerByUrl(
+    sellerByUrl(
         seller_url: String! @doc(description: "Seller Url Key")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByUrl") @doc(description: "Get Seller by Url key") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByUrl\\Identity")
 
@@ -86,14 +85,14 @@ type Query {
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ):Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductSellers") @doc(description: "The seller product query searches for seller products that match the criteria specified in the search and filter attributes")
 
-    lofSellerList(
+    sellers(
        filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
        sort: SellerSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\Identity")
 
-   lofSellerGroups(
+   sellerCollection(
        filter: SellerGroupFilterInput @doc(description: "Identifies which question attributes to search for and return."),
        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
@@ -103,14 +102,20 @@ type Query {
 
 type Mutation {
 
-    LofMkpCreateSeller(input: SellerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Create a new Seller")
+    registerSeller(input: SellerMutationInput!): MarketplaceOuput @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateSeller") @doc(description: "Register a new Seller Account, create new seller account")
+
+    becomeSeller (
+        input: SellerInput @doc(description: "Query by BecomeSellerMutationInput.")
+    ) : MarketplaceOuput @resolver( class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\BecomeSeller") @doc(description: "Query by Mutation Become Seller.")
 
     LofMkpReviewSeller(input: ReviewInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
 
-    LofMkpCreateCustomerSeller(input: SellerCustomerInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CreateCustomerSeller") @doc(description: "Create a new Seller before create customer account")
-
     LofMkpCustomerSendMessageSeller(input: CustomerMessageInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\CustomerSendMessageSeller") @doc(description: "Customer send message to seller")
 
+}
+
+type Customer {
+    seller: Seller @resolver( class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Seller") @doc(description: "Query seller profile of current logged in customer account.")
 }
 
 type SellerRate {
@@ -298,6 +303,50 @@ type SellerGroups {
     items: [SellerGroup] @doc(description: "An array of sellers that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\SortFields")
+}
+
+type MarketplaceOuput {
+    code: String @doc(description: "The response code")
+    message: String @doc(description: "The response message")
+}
+
+input SellerMutationInput {
+    seller: SellerInput! @doc(description: "Seller Input data")
+    customer: CustomerDataInput! @doc(description: "Seller Input data")
+    password: String!
+}
+
+input SellerInput {
+    group_id  : String @doc(description: "An group_id")
+    url_key  : String! @doc(description: "An seller url key.")
+}
+
+input CustomerDataInput {
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    firstname: String! @doc(description: "The customer's first name")
+    middlename: String @doc(description: "The customer's middle name")
+    lastname: String! @doc(description: "The customer's family name")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    email: String! @doc(description: "The customer's email address. Required for customer creation")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
+    date_of_birth: String @doc(description: "The customer's date of birth")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+    address: AddressInput @doc(description: "The customer's AddressInput")
+}
+
+input AddressInput {
+    region_id: String @doc(description: "The address's region_id")
+    country_id: CountryCodeEnum! @doc(description: "Deprecated: use `country_code` instead.")
+    city: String @doc(description: "The city or town")
+    street: [String] @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String @doc(description: "The telephone number")
+    postcode: String @doc(description: "The customer's ZIP or postal code")
+    fax: String @doc(description: "The fax number")
+    vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
 }
 
 type Res {
