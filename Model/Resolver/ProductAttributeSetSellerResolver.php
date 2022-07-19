@@ -60,7 +60,7 @@ class ProductAttributeSetSellerResolver implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         if (isset($value['entity_id']) && $value['entity_id']) {
-            return $this->_sellerRepository->getSellersbyProductID($value['entity_id']);
+            return $this->_sellerRepository->getSellerByProductId($value['entity_id']);
         } else {
             return [];
         }

@@ -65,41 +65,41 @@ type Query {
 
     productsBySellerId(
         seller_id: Int! @doc(description: "Seller id")
-        search: String = "" @doc(description: "Performs a full-text search using the specified key words."),
-        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
+        search: String = "" @doc(description: "Performs a full-text search using the specified key words.")
+        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return.")
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerId") @doc(description: "Get Product by Seller ID")
 
     productsBySellerUrl(
         seller_url: Int! @doc(description: "Seller id")
-        search: String = "" @doc(description: "Performs a full-text search using the specified key words."),
-        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
-        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        search: String = "" @doc(description: "Performs a full-text search using the specified key words.")
+        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return.")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductBySellerUrl") @doc(description: "Get Product by Seller Url key")
 
     lofProductList(
-        search: String = "" @doc(description: "Performs a full-text search using the specified key words."),
-        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
-        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        search: String = "" @doc(description: "Performs a full-text search using the specified key words.")
+        filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return.")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ):Products @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductSellers") @doc(description: "The seller product query searches for seller products that match the criteria specified in the search and filter attributes")
 
     sellers(
-       filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return."),
-       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+       filter: SellerFilterInput @doc(description: "Identifies which question attributes to search for and return.")
+       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
        sort: SellerSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
    ):Sellers @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Sellers\\Identity")
 
    sellerCollection(
-       filter: SellerGroupFilterInput @doc(description: "Identifies which question attributes to search for and return."),
-       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
-       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+       filter: SellerGroupFilterInput @doc(description: "Identifies which question attributes to search for and return.")
+       pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+       currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
        sort: SellerGroupSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
    ):SellerGroups @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerGroups") @doc(description: "The seller query searches for sellers that match the criteria specified in the search and filter attributes") @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerGroups\\Identity")
 
@@ -221,6 +221,7 @@ type Sellers {
 
 type Products {
     total_count: Int @doc(description: "The number of seller products returned")
+    page_info: SearchResultPageInfo @doc(description: "Metadata for pagination rendering")
     items: [ProductInterface] @doc(description: "An array of seller products that match the specified search criteria")
 }
 
