@@ -40,6 +40,7 @@ class Seller extends AbstractSellerQuery implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        die("asdfasd");
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('Value must contain "model" property.'));
         }

@@ -20,6 +20,10 @@ enum UrlRewriteEntityTypeEnum {
     LOF_MARKETPLACE
 }
 
+interface ProductInterface {
+    seller: Seller @doc(description: "Seller who sell this product") @resolver(class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Seller")
+}
+
 type StoreConfig {
 
     lofmarketplace_general_enable  : String  @doc(description: "Query by lofmarketplace_general_enable.")
@@ -115,7 +119,7 @@ type Mutation {
         input: SellerInput @doc(description: "Query by BecomeSellerMutationInput.")
     ) : MarketplaceOuput @resolver( class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\BecomeSeller") @doc(description: "Query by Mutation Become Seller.")
 
-    reviewSeller(input: ReviewInput!): Res @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
+    reviewSeller(input: ReviewInput!): MarketplaceOuput @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
 
     customerSendMessage(input: CustomerMessageInput!): MarketplaceOuput @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\SendMessage") @doc(description: "Customer send message to seller")
 
@@ -364,15 +368,6 @@ input AddressInput {
     fax: String @doc(description: "The fax number")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
     custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
-}
-
-type Res {
-    code: String
-    message: String
-}
-
-interface ProductInterface {
-    seller: Seller @doc(description: "Seller who sell this product") @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ProductAttributeSetSellerResolver")
 }
 
 input SellerCustomerInput {
