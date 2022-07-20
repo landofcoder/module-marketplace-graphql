@@ -42,6 +42,9 @@ class SellerById extends AbstractSellerQuery implements ResolverInterface
         $isGetProducts = isset($args['get_products']) ? (bool)$args['get_products'] : false;
         $isGetOtherInfo = isset($args['get_other_info']) ? (bool)$args['get_other_info'] : false;
         $sellerData = $this->_sellerRepository->get((int)$args['seller_id'], $isGetOtherInfo, $isGetProducts);
-        return $sellerData? $sellerData->__toArray() : [];
+        $data = $sellerData ? $sellerData->__toArray() : [];
+        $data["model"] = $sellerData;
+
+        return $data;
     }
 }

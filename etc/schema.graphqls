@@ -61,6 +61,8 @@ type Query {
 
     lofSellerByProduct(
         product_sku: String! @doc(description: "Product SKU")
+        get_other_info: Boolean = false @doc(description: "Get other info: reviews, ratings, total sales, vacation")
+        get_products: Boolean = false @doc(description: "Get Latest Products")
     ): Seller @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByProduct") @doc(description: "Get Seller by ID")  @cache( cacheIdentity: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\SellerByProduct\\Identity")
 
     productsBySellerId(
@@ -122,7 +124,7 @@ type Mutation {
 }
 
 type Customer {
-    seller: Seller @resolver( class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Seller") @doc(description: "Query seller profile of current logged in customer account.")
+    seller: Seller @resolver( class: "Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\Seller") @doc(description: "Query seller profile of current logged in customer account.")
 
     sellerMessages (
         filter: SellerMessageFilterInput @doc(description: "Identifies which seller messages filter inputs to search for and return.")

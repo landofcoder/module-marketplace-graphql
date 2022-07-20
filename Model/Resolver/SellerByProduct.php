@@ -71,7 +71,15 @@ class SellerByProduct extends AbstractSellerQuery implements ResolverInterface {
             );
         }
 
-        $sellerData = $this->_sellerRepository->getSellerByProductSku($args['product_sku']);
-        return $sellerData?$sellerData->__toArray():[];
+        $isGetProducts = isset($args['get_products']) ? (bool)$args['get_products'] : false;
+        $isGetOtherInfo = isset($args['get_other_info']) ? (bool)$args['get_other_info'] : false;
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = $store->getId();
+
+        $sellerData = $this->_sellerRepository->getSellerByProductSku($args['product_sku'], $storeId, $isGetProducts, $isGetOtherInfo);
+        $data = $sellerData ? $sellerData->__toArray() : [];
+        $data["model"] = $sellerData;
+
+        return $data;
     }
 }

@@ -157,6 +157,8 @@ class Sellers implements SellerQueryInterface
         foreach ($collection as $val) {
             $data = $val->getData();
             if (isset($data['image']) && $data['image']) {
+                $data["banner_pic"] = (!isset($data["banner_pic"]) || (isset($data["banner_pic"]) && empty($data["banner_pic"]))) ? $data['image'] : $data["banner_pic"];
+                $data["logo_pic"] = (!isset($data["logo_pic"]) || (isset($data["logo_pic"]) && empty($data["logo_pic"]))) ? $data['thumbnail'] : $data["logo_pic"];
                 $data["image"] = $this->_storeManager->getStore()->getBaseUrl(
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     ) . $data["image"];

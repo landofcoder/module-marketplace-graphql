@@ -26,6 +26,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class Seller
@@ -39,16 +40,22 @@ class Seller extends AbstractSellerQuery implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        echo (isset($args['seller_id']) ? $args['seller_id'] : 0);
-        echo " -- <pre>";
-        print_r($value['seller_id']);
-        die();
-        if (!isset($value['seller_id'])) {
-            throw new GraphQlInputException(__('Value must contain "seller_id" property.'));
+        if (!isset($value['model'])) {
+            throw new GraphQlInputException(__('Value must contain "model" property.'));
         }
-        $sellerData = $this->_sellerRepository->get($value['seller_id']);
+        /** @var Product $product */
+        $product = $value['model'];
+        $productSku = $product->getSku();
+        if (empty($productSku)) {
+            throw new GraphQlInputException(__('Value must contain "product_sku" property.'));
+        }
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = $store->getId();
+
+        $sellerData = $this->_sellerRepository->getSellerByProductSku($productSku, $storeId);
         $data = $sellerData ? $sellerData->__toArray() : [];
         $data["model"] = $sellerData;
+
         return $data;
     }
 }
