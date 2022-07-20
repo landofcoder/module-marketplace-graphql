@@ -25,6 +25,7 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Class Seller
@@ -38,9 +39,14 @@ class Seller extends AbstractSellerQuery implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $this->_labelFlag = 1;
-        $this->validateArgs($args);
-        $sellerData = $this->_sellerRepository->get($args['seller_id']);
+        echo (isset($args['seller_id']) ? $args['seller_id'] : 0);
+        echo " -- <pre>";
+        print_r($value['seller_id']);
+        die();
+        if (!isset($value['seller_id'])) {
+            throw new GraphQlInputException(__('Value must contain "seller_id" property.'));
+        }
+        $sellerData = $this->_sellerRepository->get($value['seller_id']);
         $data = $sellerData ? $sellerData->__toArray() : [];
         $data["model"] = $sellerData;
         return $data;

@@ -156,7 +156,7 @@ class Sellers implements SellerQueryInterface
         $items = [];
         foreach ($collection as $val) {
             $data = $val->getData();
-            if(isset($data['image']) && $data['image']){
+            if (isset($data['image']) && $data['image']) {
                 $data["image"] = $this->_storeManager->getStore()->getBaseUrl(
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     ) . $data["image"];

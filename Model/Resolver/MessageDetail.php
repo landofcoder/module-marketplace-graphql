@@ -10,7 +10,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use \Lof\MarketPlace\Model\ResourceModel\MessageDetail\CollectionFactory;
+use Lof\MarketPlace\Model\ResourceModel\MessageDetail\CollectionFactory;
 
 
 class MessageDetail implements ResolverInterface
