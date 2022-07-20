@@ -28,6 +28,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
 
 /**
  * Class AbstractSellerQuery
@@ -40,7 +41,6 @@ abstract class AbstractSellerQuery
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
-
 
     /**
      * @var ProductRepositoryInterface
@@ -55,11 +55,16 @@ abstract class AbstractSellerQuery
      * @var SellersFrontendRepositoryInterface
      */
     protected $_sellerRepository;
+
     /**
      * @var SellerProductsRepositoryInterface
      */
     protected $_productSeller;
 
+    /**
+     * @var SellersRepositoryInterface
+     */
+    protected $_sellerManagementRepository;
 
     /**
      * AbstractSellerQuery constructor.
@@ -67,17 +72,20 @@ abstract class AbstractSellerQuery
      * @param SellersFrontendRepositoryInterface $seller
      * @param SellerProductsRepositoryInterface $productSeller
      * @param ProductRepositoryInterface $productRepository
+     * @param SellersRepositoryInterface $sellerManagementRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        SellersRepositoryInterface $sellerManagementRepository
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_sellerRepository = $seller;
         $this->_productSeller = $productSeller;
         $this->_productRepository = $productRepository;
+        $this->_sellerManagementRepository = $sellerManagementRepository;
     }
 
     /**

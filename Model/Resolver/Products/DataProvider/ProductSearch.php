@@ -36,7 +36,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Lof\MarketPlace\Model\SellerProduct;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -74,18 +74,12 @@ class ProductSearch
     private $searchCriteriaBuilder;
 
     /**
-     * @var OptionInterfaceFactory
-     */
-    private $optionFactory;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface $collectionPreProcessor
      * @param CollectionPostProcessor $collectionPostProcessor
      * @param SearchResultApplierFactory $searchResultsApplierFactory
      * @param ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
-     * @param OptionInterfaceFactory $optionFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -93,8 +87,7 @@ class ProductSearch
         CollectionProcessorInterface $collectionPreProcessor,
         CollectionPostProcessor $collectionPostProcessor,
         SearchResultApplierFactory $searchResultsApplierFactory,
-        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder,
-        OptionInterfaceFactory $optionFactory
+        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -102,7 +95,6 @@ class ProductSearch
         $this->collectionPostProcessor = $collectionPostProcessor;
         $this->searchResultApplierFactory = $searchResultsApplierFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->optionFactory = $optionFactory;
     }
 
     /**
@@ -124,40 +116,25 @@ class ProductSearch
     ): SearchResultsInterface {
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
-        if($sellerId) {
+        if ($sellerId) {
             $collection->addFieldToFilter('seller_id', $sellerId);
         } else {
             $collection->addFieldToFilter('seller_id', ['neq' => 0]);
         }
+        $collection->addAttributeToFilter('approval',
+                        ['in' => [
+                            SellerProduct::STATUS_NOT_SUBMITED,
+                            SellerProduct::STATUS_APPROVED
+                        ]
+                    ]);
         //Create a copy of search criteria without filters to preserve the results from search
         $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
         //Apply CatalogSearch results from search and join table
-        if (!empty($searchResult) && $searchResult->getItems()) {
-            $items = [];
-            foreach ($searchResult->getItems() as $_item) {
-                if (get_class($_item) == "Smile\\ElasticsuiteCore\\Search\\Adapter\\Elasticsuite\\Response\\Document") {
-                    $score = $_item->getCustomAttribute('score');
-                    if (!$score) {
-                        $scoreOption = $this->optionFactory->create();
-                        $scoreOption->setLabel("score");
-                        $scoreOption->setValue(1);
-                        $_item->setCustomAttribute('score', $scoreOption);
-                    }
-                    $items[] = $_item;
-                }
-            }
-            if (!empty($items)) {
-                $searchResult->setItems($items);
-            }
-
-            $this->getSearchResultsApplier(
-                $searchResult,
-                $collection,
-                $this->getSortOrderArray($searchCriteriaForCollection)
-            )->apply();
-        }
-
-        $collection->setFlag('search_resut_applied', true);
+        $this->getSearchResultsApplier(
+            $searchResult,
+            $collection,
+            $this->getSortOrderArray($searchCriteriaForCollection)
+        )->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
         $collection->load();
@@ -215,6 +192,7 @@ class ProductSearch
                 $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
             }
         }
+
         return $ordersArray;
     }
 }

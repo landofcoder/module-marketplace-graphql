@@ -42,11 +42,15 @@ magento 2 marketplace graphql extension
 
 ## Queries
 
-1. Get Seller Profile Info By Id
+1. Get Seller Profile Info By Url
 
 ```
 {
-    lofSellerById(seller_id: Int!) {
+    sellerByUrl(
+        seller_url: String! @doc(description: "Seller Url Key")
+        get_other_info: Boolean = false @doc(description: "Get other info: reviews, ratings, total sales, vacation")
+        get_products: Boolean = false @doc(description: "Get Latest Products")
+    ) {
         address
         banner_pic
         city
@@ -92,11 +96,116 @@ magento 2 marketplace graphql extension
 }
 ```
 
-2. Get List Sellers with Filter options
+Example:
 
 ```
 {
-    lofSellerList (
+  sellerByUrl(seller_url: "seller1") {
+    shop_title
+    thumbnail
+    logo_pic
+    banner_pic
+    url_key
+    telephone
+    product_count
+    total_sold
+    offers
+    benefits
+    product_shipping_info
+    prepare_time
+    response_ratio
+    response_time
+    creation_time
+  }
+}
+
+```
+
+2. Get Seller Profile By ID
+
+```
+{
+    sellerById(
+        seller_id: Int! @doc(description: "Seller id")
+        get_other_info: Boolean = false @doc(description: "Get other info: reviews, ratings, total sales, vacation")
+        get_products: Boolean = false @doc(description: "Get Latest Products")
+    ) {
+        address
+        banner_pic
+        city
+        company_description
+        company_locality
+        contact_number
+        country
+        customer_id
+        email
+        gplus_active
+        gplus_id
+        group
+        image
+        name
+        page_layout
+        region
+        return_policy
+        sale
+        seller_id
+        shipping_policy
+        shop_title
+        status
+        store_id
+        thumbnail
+        seller_rates {
+            items {
+                created_at
+                customer_id
+                detail
+                email
+                nickname
+                rate1
+                rate2
+                rate3
+                rating_id
+                seller_id
+                status
+                title
+            }
+            total_count
+        }
+  }
+}
+```
+
+Example:
+
+```
+{
+  sellerById(seller_id: 1) {
+    shop_title
+    thumbnail
+    logo_pic
+    banner_pic
+    url_key
+    telephone
+    product_count
+    total_sold
+    offers
+    benefits
+    product_shipping_info
+    prepare_time
+    response_ratio
+    response_time
+    creation_time
+  }
+}
+
+```
+
+
+3. Get List Sellers with Filter options
+
+```
+{
+    sellers (
         filter: SellerFilterInput,
         pageSize: Int = 20,
         currentPage: Int = 1,
@@ -192,7 +301,28 @@ magento 2 marketplace graphql extension
 }
 ```
 
-3. Filter products by seller ID
+4. Get Seller Collection (Groups)
+
+```
+{
+    sellerCollection(
+        filter: SellerGroupFilterInput,
+        pageSize: Int = 5,
+        currentPage: Int = 1,
+        sort: SellerGroupSortInput
+    ) {
+        total_count
+        items {
+            group_id
+            name
+            url_key
+            position
+        }
+    }
+}
+```
+
+5. Filter products by seller ID
 
 ```
 fragment ShopProduct on ProductInterface {
@@ -234,7 +364,7 @@ fragment PageInfo on SearchResultPageInfo {
   total_pages
 }
 
-lofProductBySellerId(
+productsBySellerId(
     seller_id: Int!
     search: String = ""
     filter: ProductAttributeFilterInput
@@ -252,4 +382,291 @@ lofProductBySellerId(
 }
 ```
 
+6. Get Seller Products by Seller Url
 
+Example: get products of seller "seller1"
+
+```
+{
+  productsBySellerUrl(
+    seller_url: "seller1"
+    search: ""
+    filter: {}
+    pageSize: 1
+    currentPage: 1
+  ) {
+    items {
+      id
+      name
+      url_key
+      rating_summary
+      sku
+      stock_status
+      image {
+        url
+        label
+      }
+      description {
+        html
+      }
+      short_description {
+        html
+      }
+      price {
+        regularPrice {
+          amount {
+            currency
+          }
+        }
+      }
+    }
+    page_info {
+      page_size
+      current_page
+      total_pages
+    }
+    total_count
+  }
+}
+```
+
+7. Get Seller Information on products query
+
+Example:
+
+```
+{
+  products(filter: { sku: { eq: "AAAU_B2C-W713327" } }) {
+    items {
+      name
+      sku
+      url_key
+      stock_status
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+            currency
+          }
+        }
+      }
+      seller {
+        shop_title
+        thumbnail
+        url_key
+        telephone
+        product_count
+        total_sold
+        offers
+        benefits
+        product_shipping_info
+        prepare_time
+        response_ratio
+        response_time
+        creation_time
+      }
+    }
+    total_count
+    page_info {
+      page_size
+    }
+  }
+}
+
+```
+
+8. Mutation Registrer Seller
+
+```
+mutation {
+  registerSeller(
+    input: {
+        seller: {
+            group_id: String
+            url_key: String!
+        },
+        customer: {
+            firstname: String!
+            lastname: String!
+            email: String!
+            address: {
+                region_id: String
+                country_id: String!
+                city: String!
+                street: String!
+                company: String
+                telephone: String!
+                postcode: String!
+            }
+        },
+        password: String!
+    }
+  ) {
+    code
+    message
+  }
+}
+```
+
+9. Mutation Become Seller - required customer logged in
+
+```
+mutation {
+  becomeSeller(
+    input: {
+        group_id: String
+        url_key: String!
+    }
+  ) {
+    code
+    message
+  }
+}
+```
+
+10. Mutation Review Seller - required customer logged in
+
+```
+mutation {
+  reviewSeller(
+    input: {
+        seller_id  : String!
+        rate1  : Int!
+        rate2  : Int!
+        rate3  : Int!
+        nickname  : String!
+        email  : String!
+        title  : String!
+        detail  : String!
+    }
+  ) {
+    code
+    message
+  }
+}
+```
+
+11. Mutation Customer send contact to seller - required customer logged in
+
+```
+mutation {
+  customerSendMessage(
+    input: {
+        seller_url  : String!
+        subject  : String
+        content  : String!
+    }
+  ) {
+    code
+    message
+  }
+}
+```
+
+12. Mutation Customer send reply to a message - required customer logged in
+
+```
+mutation {
+  customerReplyMessage(
+    input: {
+        message_id  : Int!
+        content  : String!
+    }
+  ) {
+    code
+    message
+  }
+}
+```
+
+13. Query get messages of logged in customer - required customer logged in
+
+```
+{
+    sellerMessages(
+        filter: SellerMessageFilterInput
+        pageSize: Int = 20
+        currentPage: Int = 1
+        sort: SellerMessageSortInput
+    ) {
+        total_count
+        items {
+            message_id
+            description
+            subject
+            sender_email
+            sender_name
+            created_at
+            status
+            is_read
+            sender_id
+            owner_id
+            receiver_id
+            seller_send
+            details (
+                pageSize: Int = 20
+                currentPage: Int = 1
+            ) {
+                items {
+                    content
+                    sender_name
+                    sender_email
+                    receiver_name
+                    is_read
+                    created_at
+                }
+                total_count
+                page_info {
+                    ...PageInfo
+                }
+            }
+        }
+        page_info {
+            ...PageInfo
+        }
+    }
+}
+```
+
+14. Query Get Seller Info of Logged in Customer - required customer logged in
+
+```
+{
+  customer {
+    firstname
+    lastname
+    suffix
+    email
+    addresses {
+      firstname
+      lastname
+      street
+      city
+      region {
+        region_code
+        region
+      }
+      postcode
+      country_code
+      telephone
+    }
+    seller {
+        shop_title
+        thumbnail
+        logo_pic
+        banner_pic
+        url_key
+        telephone
+        product_count
+        total_sold
+        offers
+        benefits
+        product_shipping_info
+        prepare_time
+        response_ratio
+        response_time
+        creation_time
+    }
+  }
+}
+```

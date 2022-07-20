@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketplaceGraphQl
- * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
+ * @package    Lof_SellerGraphQl
+ * @copyright  Copyright (c) 2022 Landofcoder (https://landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
 
@@ -23,16 +23,16 @@ declare(strict_types=1);
 
 namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
-use Lof\MarketPlace\Api\Data\SellerInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Catalog\Model\Product\Url;
-
+use Lof\MarketplaceGraphQl\Model\Resolver\DataProvider\CreateSeller as DataProviderCreateSeller;
 
 /**
  * Class CreateSeller
@@ -45,35 +45,54 @@ class CreateSeller implements ResolverInterface
      * @var GetCustomer
      */
     private $getCustomer;
+
     /**
-     * @var DataProvider\CreateSeller
+     * @var DataProviderCreateSeller
      */
     private $_createSeller;
+
     /**
      * @var Url
      */
     private $url;
-    /**
-     * @var SellerInterface
-     */
-    private $sellerInterface;
 
     /**
-     * CreateSeller constructor.
-     * @param DataProvider\CreateSeller $createSeller
+     * @var CustomerInterface
+     */
+    private $customerInterface;
+
+    /**
+     * @var AddressInterface
+     */
+    private $addressInterface;
+
+    /**
+     * @var CustomerCollection
+     */
+    private $customerCollection;
+
+    /**
+     * Construct BecomeSeller
+     * @param DataProviderCreateSeller $createSeller
      * @param GetCustomer $getCustomer
-     * @param SellerInterface $sellerInterface
+     * @param CustomerInterface $customerInterface
+     * @param AddressInterface $addressInterface
+     * @param CustomerCollection $customerCollection
      * @param Url $url
      */
     public function __construct(
-        DataProvider\CreateSeller $createSeller,
+        DataProviderCreateSeller $createSeller,
         GetCustomer $getCustomer,
-        SellerInterface $sellerInterface,
+        CustomerInterface $customerInterface,
+        AddressInterface $addressInterface,
+        CustomerCollection $customerCollection,
         Url $url
     ) {
         $this->_createSeller = $createSeller;
         $this->getCustomer = $getCustomer;
-        $this->sellerInterface = $sellerInterface;
+        $this->customerInterface = $customerInterface;
+        $this->addressInterface = $addressInterface;
+        $this->customerCollection = $customerCollection;
         $this->url = $url;
     }
 
@@ -87,27 +106,43 @@ class CreateSeller implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
-        if (!$context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
         if (!($args['input']) || !isset($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
         $args = $args['input'];
-        $customer = $this->getCustomer->execute($context);
-        $args['customer_id'] = $customer->getId();
-        $args['name'] = $customer->getFirstname().' '.$customer->getLastname();
-        $args['email'] = $customer->getEmail();
+        $customer = $args['customer'];
+        $data = $args['seller'];
+        $password = $args['password'];
+        $address = $customer['address'];
 
-        $sellerInterface = $this->sellerInterface;
-        $sellerInterface->setEmail($args['email'])
-            ->setName($args['name'])
-            ->setGroup($args['group_id'])
-            ->setUrl($args['url_key'])
-            ->setCustomerId($args['customer_id']);
-        return $this->_createSeller->createSeller($sellerInterface, $args['customer_id']);
+        $customerCollection = $this->customerCollection->addFieldToFilter('email', $customer['email']);
+        if ($customerCollection->getData()) {
+            throw new GraphQlInputException(
+                __('A customer with the same email address already exists in an associated website.')
+            );
+        }
+
+        $data['url_key'] = $this->url->formatUrlKey($data['url_key']);
+        $data['group'] = $data['group_id'];
+        $data['country'] = $address['country_id'];
+        $addressInterface = $this->addressInterface;
+        $addressInterface->setCountryId($address['country_id'])
+            ->setCity($address['city'])
+            ->setStreet([$address['street']])
+            ->setTelephone($address['telephone'])
+            ->setPostcode($address['postcode'])
+            ->setFirstname($customer['firstname'])
+            ->setLastname($customer['lastname']);
+        if (isset($address['region_id'])) {
+            $addressInterface->setRegionId($address['region_id']);
+        }
+        $addressArr[] = $addressInterface;
+        $customerInterface = $this->customerInterface;
+        $customerInterface->setFirstname($customer['firstname'])
+            ->setLastname($customer['lastname'])
+            ->setEmail($customer['email'])
+            ->setAddresses($addressArr);
+
+        return $this->_createSeller->registerSeller($customerInterface, $data, $password);
     }
-
-
 }

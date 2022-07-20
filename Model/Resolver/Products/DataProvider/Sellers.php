@@ -156,7 +156,9 @@ class Sellers implements SellerQueryInterface
         $items = [];
         foreach ($collection as $val) {
             $data = $val->getData();
-            if(isset($data['image']) && $data['image']){
+            if (isset($data['image']) && $data['image']) {
+                $data["banner_pic"] = (!isset($data["banner_pic"]) || (isset($data["banner_pic"]) && empty($data["banner_pic"]))) ? $data['image'] : $data["banner_pic"];
+                $data["logo_pic"] = (!isset($data["logo_pic"]) || (isset($data["logo_pic"]) && empty($data["logo_pic"]))) ? $data['thumbnail'] : $data["logo_pic"];
                 $data["image"] = $this->_storeManager->getStore()->getBaseUrl(
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     ) . $data["image"];
@@ -166,14 +168,10 @@ class Sellers implements SellerQueryInterface
                     ) . $data["thumbnail"];
             }
             $args['seller_id'] = $val->getData('seller_id');
-            $sellerRates = $this->sellerFrontendRepository->getSellersRating((int)$data['seller_id']);
-            $data['seller_rates'] = [
-                'total_count' => $sellerRates->getTotalCount(),
-                'items' => $sellerRates->getItems()
-            ];
+            $sellerRates = $this->sellerFrontendRepository->getSellersRating($data['seller_id']);
+            $data['seller_rates'] = $sellerRates;
             $data['group_id']  = $val->getGroupId();
             $data['group'] = $val->getSellerGroup();
-            $data['country'] = !empty($val->getCountry()) ? $val->getCountry() : $val->getCountryId();
             $data['products'] = $this->getResult( $args, $info, $context);
             $items[] = $data;
         }

@@ -35,8 +35,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
+        <arguments>
+            <argument name="attributesInstances" xsi:type="array">
+                <item name="lof_seller_messages" xsi:type="object">\Lof\MarketplaceGraphQl\Model\Resolver\Messages\FilterArgument</item>
+            </argument>
+        </arguments>
+    </type>
 
     <preference type="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\Search" for="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+
     <preference type="Lof\MarketplaceGraphQl\Model\Resolver\Products\DataProvider\Sellers" for="Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\SellerQueryInterface"/>
+
+    <preference for="Lof\MarketplaceGraphQl\Api\Data\MessageInterface" type="Lof\MarketplaceGraphQl\Model\Data\Message"/>
+	<preference for="Lof\MarketplaceGraphQl\Api\Data\MessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <preference for="Lof\MarketplaceGraphQl\Api\MessageRepositoryInterface" type="Lof\MarketplaceGraphQl\Model\MessageRepository"/>
 
 </config>

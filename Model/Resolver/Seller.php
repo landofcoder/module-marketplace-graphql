@@ -15,33 +15,44 @@
  *
  * @category   Landofcoder
  * @package    Lof_MarketplaceGraphQl
- * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
+ * @copyright  Copyright (c) 2022 Landofcoder (https://landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
+declare(strict_types=1);
 
 namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Catalog\Model\Product;
 
 /**
- * Class SellerById
+ * Class Seller
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerById extends AbstractSellerQuery implements ResolverInterface
+class Seller extends AbstractSellerQuery implements ResolverInterface
 {
     /**
      * @inheritDoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $this->_labelFlag = 1;
-        $this->validateArgs($args);
-        $isGetProducts = isset($args['get_products']) ? (bool)$args['get_products'] : false;
-        $isGetOtherInfo = isset($args['get_other_info']) ? (bool)$args['get_other_info'] : false;
-        $sellerData = $this->_sellerRepository->get((int)$args['seller_id'], $isGetOtherInfo, $isGetProducts);
+        if (!isset($value['model'])) {
+            throw new GraphQlInputException(__('Value must contain "model" property.'));
+        }
+        /** @var Product $product */
+        $product = $value['model'];
+        $productSku = $product->getSku();
+        if (empty($productSku)) {
+            throw new GraphQlInputException(__('Value must contain "product_sku" property.'));
+        }
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = $store->getId();
+
+        $sellerData = $this->_sellerRepository->getSellerByProductSku($productSku, $storeId);
         $data = $sellerData ? $sellerData->__toArray() : [];
         $data["model"] = $sellerData;
 
