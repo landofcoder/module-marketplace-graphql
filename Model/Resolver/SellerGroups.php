@@ -24,6 +24,7 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
 use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 use Lof\MarketPlace\Api\SellerGroupRepositoryInterface;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -68,6 +69,7 @@ class SellerGroups extends AbstractSellerQuery implements ResolverInterface
      * @param ProductRepositoryInterface $productRepository
      * @param SellerGroupRepositoryInterface $sellerGroup
      * @param ScopeConfigInterface $scopeConfig
+     * @param SellersRepositoryInterface $sellerManagementRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -75,11 +77,12 @@ class SellerGroups extends AbstractSellerQuery implements ResolverInterface
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
         SellerGroupRepositoryInterface $sellerGroup,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SellersRepositoryInterface $sellerManagementRepository
     ) {
         $this->sellerGroup = $sellerGroup;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository, $sellerManagementRepository);
     }
 
     /**

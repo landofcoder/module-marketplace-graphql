@@ -23,6 +23,8 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
 use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
 use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
+use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\SellerQueryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -65,20 +67,22 @@ class Sellers extends AbstractSellerQuery implements ResolverInterface
      * @param SellersFrontendRepositoryInterface $seller
      * @param SellerProductsRepositoryInterface $productSeller
      * @param ProductRepositoryInterface $productRepository
-     * @param Products\Query\SellerQueryInterface $sellers
+     * @param SellerQueryInterface $sellers
      * @param ScopeConfigInterface $scopeConfig
+     * @param SellersRepositoryInterface $sellerManagementRepository
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
-        Products\Query\SellerQueryInterface $sellers,
-        ScopeConfigInterface $scopeConfig
+        SellerQueryInterface $sellers,
+        ScopeConfigInterface $scopeConfig,
+        SellersRepositoryInterface $sellerManagementRepository
     ) {
         $this->sellers = $sellers;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository, $sellerManagementRepository);
     }
 
     /**

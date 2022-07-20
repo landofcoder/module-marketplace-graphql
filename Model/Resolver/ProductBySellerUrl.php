@@ -27,6 +27,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
 use Lof\MarketPlace\Model\SellerFactory;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
@@ -64,14 +65,17 @@ class ProductBySellerUrl extends AbstractSellerQuery implements ResolverInterfac
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
         ProductQueryInterface $searchQuery,
-        SellerFactory $sellerFactory
-    )
-    {
+        SellerFactory $sellerFactory,
+        SellersRepositoryInterface $sellerManagementRepository
+    ) {
         $this->searchQuery = $searchQuery;
         $this->sellerFactory = $sellerFactory;
-        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository, $sellerManagementRepository);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function resolve(
         Field $field,
         $context,

@@ -23,6 +23,7 @@ namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
 use Lof\MarketPlace\Api\SellerProductsRepositoryInterface;
 use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -36,28 +37,34 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
  *
  * @package Lof\MarketplaceGraphQl\Model\Resolver
  */
-class SellerByProduct extends AbstractSellerQuery implements ResolverInterface {
+class SellerByProduct extends AbstractSellerQuery implements ResolverInterface
+{
     /**
      * @var ProductRepository
      */
     private $product;
+
     /**
      * @var Collection
      */
     private $productCollection;
 
+    /**
+     * @inheritdoc
+     */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
         ProductRepository $product,
-        Collection $collection
+        Collection $collection,
+        SellersRepositoryInterface $sellerManagementRepository
     )
     {
         $this->product = $product;
         $this->productCollection = $collection;
-        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository, $sellerManagementRepository);
     }
 
     /**

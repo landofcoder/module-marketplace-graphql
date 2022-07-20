@@ -26,6 +26,7 @@ use Lof\MarketPlace\Api\SellersFrontendRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Lof\MarketplaceGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
+use Lof\MarketPlace\Api\SellersRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder as SearchCriteriaBuilder;
@@ -52,21 +53,23 @@ class ProductBySellerId extends AbstractSellerQuery implements ResolverInterface
         SellersFrontendRepositoryInterface $seller,
         SellerProductsRepositoryInterface $productSeller,
         ProductRepositoryInterface $productRepository,
-        ProductQueryInterface $searchQuery
-    )
-    {
+        ProductQueryInterface $searchQuery,
+        SellersRepositoryInterface $sellerManagementRepository
+    ) {
         $this->searchQuery = $searchQuery;
-        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository);
+        parent::__construct($searchCriteriaBuilder, $seller, $productSeller, $productRepository, $sellerManagementRepository);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function resolve(
         Field $field,
         $context,
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    )
-    {
+    ) {
         if ($args['currentPage'] < 1) {
             throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
         }
