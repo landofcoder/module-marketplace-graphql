@@ -143,6 +143,16 @@ class CreateSeller implements ResolverInterface
             ->setEmail($customer['email'])
             ->setAddresses($addressArr);
 
-        return $this->_createSeller->registerSeller($customerInterface, $data, $password);
+        $data = $this->_createSeller->registerSeller($customerInterface, $data, $password);
+        $code = 0;
+        $message = "We can not register seller account at now";
+        if ($data && $data->getSellerId()) {
+            $code = $data->getSellerId();
+            $message = "Your seller account was registered successfully. We will connect with you soon.";
+        }
+        return [
+            "code" => $code,
+            "message" => $message
+        ];
     }
 }

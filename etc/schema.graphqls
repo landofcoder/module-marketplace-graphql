@@ -121,9 +121,9 @@ type Mutation {
 
     reviewSeller(input: ReviewInput!): MarketplaceOuput @resolver(class: "\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\ReviewSeller") @doc(description: "Review Seller")
 
-    customerSendMessage(input: CustomerMessageInput!): MarketplaceOuput @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\SendMessage") @doc(description: "Customer send message to seller")
+    customerSendMessage(input: CustomerMessageInput!): SellerMessage @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\SendMessage") @doc(description: "Customer send message to seller")
 
-    customerReplyMessage(input: ReplyMessageInput!): MarketplaceOuput @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\ReplyMessage") @doc(description: "Customer reply Messaage")
+    customerReplyMessage(input: ReplyMessageInput!): SellerMessageDetail @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\ReplyMessage") @doc(description: "Customer reply Messaage")
 
 }
 

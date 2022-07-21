@@ -670,35 +670,3 @@ mutation {
   }
 }
 ```
-
-15. Query Get Seller Info by Product Sku
-
-Example:
-
-```
-{
-  lofSellerByProduct(
-    product_sku: "AAAU_B2C-W713327"
-    get_other_info: false
-    get_products: false
-  ) {
-    shop_title
-    thumbnail
-    logo_pic
-    banner_pic
-    url_key
-    telephone
-    product_count
-    total_sold
-    offers
-    benefits
-    product_shipping_info
-    prepare_time
-    response_ratio
-    response_time
-    creation_time
-  }
-}
-
-
-```
