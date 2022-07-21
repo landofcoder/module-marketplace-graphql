@@ -65,7 +65,7 @@ class CreateSeller
      * @param CustomerInterface $customer
      * @param $data
      * @param $password
-     * @return CustomerInterface
+     * @return \Lof\MarketPlace\Api\Data\SellerInterface|array|mixed|string|null
      * @throws InputException
      * @throws LocalizedException
      * @throws InputMismatchException

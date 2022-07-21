@@ -110,7 +110,17 @@ class BecomeSeller implements ResolverInterface
             ->setUrl($args['url_key'])
             ->setCustomerId($args['customer_id']);
 
-        return $this->_createSeller->createSeller($sellerInterface, $args['customer_id']);
+        $data = $this->_createSeller->createSeller($sellerInterface, $args['customer_id']);
+        $code = 0;
+        $message = "We can not create seller account at now";
+        if ($data && $data->getSellerId()) {
+            $code = $data->getSellerId();
+            $message = "Your seller account was created successfully. We will connect with you soon.";
+        }
+        return [
+            "code" => $code,
+            "message" => $message
+        ];
     }
 
 

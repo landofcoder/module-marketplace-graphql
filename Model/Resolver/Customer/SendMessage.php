@@ -58,6 +58,7 @@ class SendMessage implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+
         if (!$context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }

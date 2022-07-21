@@ -45,12 +45,14 @@ class ReviewSeller implements ResolverInterface
      * @var SellerInterface
      */
     private $sellerInterface;
+
     /**
      * @var RatingFactory
      */
     private $_rateSeller;
+
     /**
-     * @var SellersRepositoryInterface
+     * @var SellersFrontendRepositoryInterface
      */
     private $sellerRepository;
     /**
@@ -98,7 +100,7 @@ class ReviewSeller implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
         $args = $args['input'];
-        $seller = $this->sellerRepository->getById($args['seller_id']);
+        $seller = $this->sellerRepository->get((int)$args['seller_id']);
         if (!isset($seller['seller_id']) || !$seller['seller_id']) {
             return [
                 "code" => 1,
