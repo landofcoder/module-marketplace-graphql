@@ -95,13 +95,14 @@ class ProductBySellerUrl extends AbstractSellerQuery implements ResolverInterfac
                 __("'seller_url' input argument is required.")
             );
         }
+
         $seller = $this->getSellerByUrl($args['seller_url']);
-        if (!$seller || ($seller && !$seller->getId())) {
+        if (!$seller || ($seller && !$seller->getData("seller_id"))) {
             throw new GraphQlInputException(
                 __("Seller %1 is not exists.", $args['seller_url'])
             );
         }
-        $args['seller_id'] = $seller->getId();
+        $args['seller_id'] = $seller->getSellerId();
         $searchResult = $this->searchQuery->getResult($args, $info, $context);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {

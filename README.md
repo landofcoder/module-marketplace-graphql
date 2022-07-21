@@ -557,7 +557,8 @@ mutation {
         content  : String!
     }
   ) {
-    message_id
+    code
+    message
   }
 }
 ```
@@ -572,7 +573,8 @@ mutation {
         content  : String!
     }
   ) {
-    created_at
+    code
+    message
   }
 }
 ```
