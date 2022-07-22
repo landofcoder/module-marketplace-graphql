@@ -127,16 +127,19 @@ class ProductSearch
                             SellerProduct::STATUS_APPROVED
                         ]
                     ]);
+
         //Create a copy of search criteria without filters to preserve the results from search
         $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
+
         //Apply CatalogSearch results from search and join table
         $this->getSearchResultsApplier(
             $searchResult,
             $collection,
             $this->getSortOrderArray($searchCriteriaForCollection)
-        )->apply();
+        );//->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
+
         $collection->load();
         $this->collectionPostProcessor->process($collection, $attributes);
 
@@ -159,7 +162,8 @@ class ProductSearch
         SearchResultInterface $searchResult,
         Collection $collection,
         array $orders
-    ): SearchResultApplierInterface {
+    ): SearchResultApplierInterface
+    {
         return $this->searchResultApplierFactory->create(
             [
                 'collection' => $collection,

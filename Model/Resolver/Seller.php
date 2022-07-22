@@ -51,11 +51,14 @@ class Seller extends AbstractSellerQuery implements ResolverInterface
         }
         $store = $context->getExtensionAttributes()->getStore();
         $storeId = $store->getId();
-
-        $sellerData = $this->_sellerRepository->getSellerByProductSku($productSku, $storeId);
-        $data = $sellerData ? $sellerData->__toArray() : [];
-        $data["model"] = $sellerData;
-
+        $data = [];
+        try {
+            $sellerData = $this->_sellerRepository->getSellerByProductSku($productSku, $storeId);
+            $data = $sellerData ? $sellerData->__toArray() : [];
+            $data["model"] = $sellerData;
+        } catch (\Exception $e) {
+            //
+        }
         return $data;
     }
 }
