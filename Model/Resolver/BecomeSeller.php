@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace Lof\MarketplaceGraphQl\Model\Resolver;
 
 use Lof\MarketPlace\Api\Data\SellerInterface;
+use Lof\MarketplaceGraphQl\Model\Resolver\DataProvider\CreateSeller as DataProviderCreateSeller;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -47,7 +48,7 @@ class BecomeSeller implements ResolverInterface
     private $getCustomer;
 
     /**
-     * @var DataProvider\CreateSeller
+     * @var DataProviderCreateSeller
      */
     private $_createSeller;
 
@@ -62,14 +63,14 @@ class BecomeSeller implements ResolverInterface
     private $sellerInterface;
 
     /**
-     * CreateSeller constructor.
-     * @param DataProvider\CreateSeller $createSeller
+     * Become Seller constructor.
+     * @param DataProviderCreateSeller $createSeller
      * @param GetCustomer $getCustomer
      * @param SellerInterface $sellerInterface
      * @param Url $url
      */
     public function __construct(
-        DataProvider\CreateSeller $createSeller,
+        DataProviderCreateSeller $createSeller,
         GetCustomer $getCustomer,
         SellerInterface $sellerInterface,
         Url $url

@@ -33,6 +33,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Catalog\Model\Product\Url;
 use Lof\MarketplaceGraphQl\Model\Resolver\DataProvider\CreateSeller as DataProviderCreateSeller;
+use Lof\MarketPlace\Api\Data\RegisterSellerInterfaceFactory;
 
 /**
  * Class CreateSeller
@@ -72,6 +73,11 @@ class CreateSeller implements ResolverInterface
     private $customerCollection;
 
     /**
+     * @var RegisterSellerInterfaceFactory
+     */
+    protected $registerSellerInterfaceFactory;
+
+    /**
      * Construct BecomeSeller
      * @param DataProviderCreateSeller $createSeller
      * @param GetCustomer $getCustomer
@@ -79,6 +85,7 @@ class CreateSeller implements ResolverInterface
      * @param AddressInterface $addressInterface
      * @param CustomerCollection $customerCollection
      * @param Url $url
+     * @param RegisterSellerInterfaceFactory $registerSellerInterfaceFactory
      */
     public function __construct(
         DataProviderCreateSeller $createSeller,
@@ -86,7 +93,8 @@ class CreateSeller implements ResolverInterface
         CustomerInterface $customerInterface,
         AddressInterface $addressInterface,
         CustomerCollection $customerCollection,
-        Url $url
+        Url $url,
+        RegisterSellerInterfaceFactory $registerSellerInterfaceFactory
     ) {
         $this->_createSeller = $createSeller;
         $this->getCustomer = $getCustomer;
@@ -94,6 +102,7 @@ class CreateSeller implements ResolverInterface
         $this->addressInterface = $addressInterface;
         $this->customerCollection = $customerCollection;
         $this->url = $url;
+        $this->registerSellerInterfaceFactory = $registerSellerInterfaceFactory;
     }
 
     /**
@@ -142,8 +151,15 @@ class CreateSeller implements ResolverInterface
             ->setLastname($customer['lastname'])
             ->setEmail($customer['email'])
             ->setAddresses($addressArr);
+        /**
+         * @var \Lof\MarketPlace\Model\Data\RegisterSeller
+         */
+        $registerSeller = $this->registerSellerInterfaceFactory->create();
+        $registerSeller->setGroupId($data['group_id'])
+        ->setShopUrl($data['url_key'])
+        ->setCountryId($data['country']);
 
-        $data = $this->_createSeller->registerSeller($customerInterface, $data, $password);
+        $data = $this->_createSeller->registerSeller($customerInterface, $registerSeller, $password);
         $code = 0;
         $message = "We can not register seller account at now";
         if ($data && $data->getSellerId()) {
