@@ -125,6 +125,8 @@ type Mutation {
 
     customerReplyMessage(input: ReplyMessageInput!): SellerMessageDetail @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\ReplyMessage") @doc(description: "Customer reply Messaage")
 
+    customerDeleteMessage(message_id: Int!): MarketplaceOuput @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\DeleteMessage") @doc(description: "Customer delete Messaage by id")
+
     sellerReplyMessage(input: SellerReplyMessageInput!): SellerMessageDetail @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Seller\\ReplyMessage") @doc(description: "Seller reply Messaage")
 }
 
