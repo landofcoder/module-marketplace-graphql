@@ -125,8 +125,7 @@ type Mutation {
 
     customerReplyMessage(input: ReplyMessageInput!): SellerMessageDetail @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\ReplyMessage") @doc(description: "Customer reply Messaage")
 
-    customerDeleteMessage(message_id: Int!): MarketplaceOuput @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Customer\\DeleteMessage") @doc(description: "Customer delete Messaage by id")
-
+    sellerReplyMessage(input: SellerReplyMessageInput!): SellerMessageDetail @resolver(class:"\\Lof\\MarketplaceGraphQl\\Model\\Resolver\\Seller\\ReplyMessage") @doc(description: "Seller reply Messaage")
 }
 
 type Customer {
@@ -370,6 +369,11 @@ input AddressInput {
     fax: String @doc(description: "The fax number")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
     custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
+}
+
+input SellerReplyMessageInput {
+    message_id: Int! @doc(description: "Current message_id")
+    content: String! @doc(description: "Message Content.")
 }
 
 input SellerCustomerInput {

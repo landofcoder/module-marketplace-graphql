@@ -70,7 +70,8 @@ class MessageDetail implements ResolverInterface
         $collection = $this->detailCollectionFactory->create()
                         ->addFieldToFilter('message_id', (int)$value['message_id'])
                         ->setPageSize($args['pageSize'])
-                        ->setCurPage($args['currentPage']);
+                        ->setCurPage($args['currentPage'])
+                        ->setOrder('created_at', 'DESC');
 
         $totalPages = $args['pageSize'] ? ((int)ceil($collection->getSize() / $args['pageSize'])) : 0;
 
