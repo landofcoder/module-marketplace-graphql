@@ -25,6 +25,7 @@
             <argument name="attributesInstances" xsi:type="array">
                 <item name="lof_marketplace_seller" xsi:type="object">\Lof\MarketplaceGraphQl\Model\Resolver\FilterArgumentSeller</item>
                 <item name="lof_marketplace_seller_group" xsi:type="object">\Lof\MarketplaceGraphQl\Model\Resolver\FilterArgumentSellerGroup</item>
+                <item name="lof_marketplace_seller_ratings" xsi:type="object">Lof\MarketplaceGraphQl\Model\Resolver\FilterArgumentRatings</item>
             </argument>
         </arguments>
     </type>
