@@ -670,3 +670,52 @@ mutation {
   }
 }
 ```
+
+15. Get Seller Ratings List by Seller Url Key
+
+Query:
+
+```
+{
+  sellerRatings(
+    seller_url: "seller1"
+    filter: {}
+    pageSize: 5
+    currentPage: 1
+    sort: { created_at: DESC }
+  ) {
+    items {
+      rating_id
+      rate1
+      rate2
+      rate3
+      rate4
+      rate5
+      rating
+      title
+      status
+      detail
+      nickname
+      created_at
+      verified_buyer
+      is_recommended
+      is_hidden
+      answer
+      admin_note
+      like_about
+      not_like_about
+      guest_email
+      plus_review
+      minus_review
+      report_abuse
+      country
+    }
+    total_count
+    page_info {
+      page_size
+      current_page
+      total_pages
+    }
+  }
+}
+```
