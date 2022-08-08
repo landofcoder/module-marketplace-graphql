@@ -99,16 +99,20 @@ class ReviewSeller implements ResolverInterface
         if (!($args['input']) || !isset($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
+        if (!isset($args['input']['seller_url']) || (isset($args['input']['seller_url']) && !$args['input']['seller_url'])) {
+            throw new GraphQlInputException(__('seller_url is required.'));
+        }
         $args = $args['input'];
-        $seller = $this->sellerRepository->get((int)$args['seller_id']);
-        if (!isset($seller['seller_id']) || !$seller['seller_id']) {
+        $seller = $this->sellerRepository->getByUrl($args['seller_url']);
+        if (!$seller || (!$seller->getId())) {
             return [
                 "code" => 1,
                 "message" => "Seller does not exits!"
             ];
         }
-        $args['seller_email'] = $seller['email'];
-        $args['seller_name'] = $seller['name'];
+        $args['seller_id'] = $seller->getId();
+        $args['seller_email'] = $seller->getEmail();
+        $args['seller_name'] = $seller->getName();
 
         $args['rating'] = ($args['rate1']+$args['rate2']+$args['rate3'])/3;
         if($this->helper->getConfig('general_settings/rating_approval')) {

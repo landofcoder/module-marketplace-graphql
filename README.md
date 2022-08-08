@@ -530,7 +530,7 @@ mutation {
 mutation {
   reviewSeller(
     input: {
-        seller_id  : String!
+        seller_url  : String!
         rate1  : Int!
         rate2  : Int!
         rate3  : Int!
