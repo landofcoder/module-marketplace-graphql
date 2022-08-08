@@ -465,7 +465,7 @@ input SellerInput {
 }
 
 input ReviewInput {
-    seller_id  : String!
+    seller_url  : String!
     rate1  : Int!
     rate2  : Int!
     rate3  : Int!
@@ -473,6 +473,9 @@ input ReviewInput {
     email  : String!
     title  : String!
     detail  : String!
+    like_about: String
+    not_like_about: String
+    is_recommended: Int
 }
 
 input CustomerDataInput {
