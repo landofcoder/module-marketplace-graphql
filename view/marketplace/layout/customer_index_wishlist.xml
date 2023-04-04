@@ -18,13 +18,14 @@
   * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
   * @license    https://landofcoder.com/terms
   -->
-
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Lof_MarketProductBundle" setup_version="1.0.0">
-    	<sequence>
-    		<module name="Magento_Catalog"/>
-    		<module name="Magento_CatalogInventory"/>
-    		<module name="Lof_MarketPlace"/>
-    	</sequence>
-    </module>
-</config>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer.wishlist.edit.tab">
+            <arguments>
+                <argument name="product_configuration_helpers" xsi:type="array">
+                    <item name="bundle" xsi:type="string">Magento\Bundle\Helper\Catalog\Product\Configuration</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>
