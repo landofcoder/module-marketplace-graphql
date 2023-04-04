@@ -24,6 +24,11 @@
 				<item name="lofmarketplace_group_seller_available" xsi:type="string">lofmarketplace/group_seller/group_seller</item>
 				<item name="lofmarketplace_available_countries_enable" xsi:type="string">lofmarketplace/available_countries/enable_available_countries</item>
 				<item name="lofmarketplace_available_countries" xsi:type="string">lofmarketplace/available_countries/available_countries</item>
+                <item name="lofmarketplace_seller_infomation_delivery_policy" xsi:type="string">lofmarketplace/seller_settings/group_seller_infomation/delivery_policy</item>
+                <item name="lofmarketplace_seller_infomation_benefits" xsi:type="string">lofmarketplace/seller_settings/group_seller_infomation/benefits</item>
+				<item name="lofmarketplace_google_analytics_enable" xsi:type="string">google/analytics/active</item>
+				<item name="lofmarketplace_google_analytics_account" xsi:type="string">google/analytics/account</item>
+				<item name="lofmarketplace_google_analytics_anonymize" xsi:type="string">google/analytics/anonymize</item>
 			</argument>
 		</arguments>
 	</type>

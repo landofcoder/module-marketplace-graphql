@@ -154,7 +154,6 @@ class Sellers implements SellerQueryInterface
         $this->collectionProcessor->process($criteria, $collection);
         $searchResults = $this->searchResultsFactory->create();
         $items = [];
-        $sellerRates=[];
         foreach ($collection as $val) {
             $data = $val->getData();
             if (isset($data['image']) && $data['image']) {
@@ -173,7 +172,7 @@ class Sellers implements SellerQueryInterface
             $data['seller_rates'] = $sellerRates;
             $data['group_id']  = $val->getGroupId();
             $data['group'] = $val->getSellerGroup();
-            $data['products'] = $this->getResult( $args, $info, $context);
+            // $data['products'] = $this->getResult( $args, $info, $context);
             $items[] = $data;
         }
         $searchResults->setItems($items);

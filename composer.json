@@ -1,33 +1,26 @@
 {
-    "name": "landofcoder/marketproductbundle",
-    "description": "Magento 2 Marketplace Product Bundle Extension",
-    "require": {
-      "landofcoder/module-all" : "1.*",
-      "landofcoder/module-marketplace" : "1.*"
-    },
-    "keywords": [
-      "landofcoder",
-      "landofcoder marketplace",
-      "Multil vendor extension",
-      "landofcoder multi vendor marketplace magento 2 extension"
-    ],
-    "license": [
-      "OSL-3.0",
-      "AFL-3.0"
-    ],
-    "version": "1.0.0",
+    "name": "landofcoder/module-marketplace-graphql",
+    "description": "Magento 2 Marketplace GraphQl extension",
     "type": "magento2-module",
+    "license": "OSL-3.0",
     "authors": [
         {
-            "name": "Landofcoder",
-            "email": "landofcoder@gmail.com",
-            "role": "Magento 2 Lof Marketplace Bundle product Extension"
+            "name": "landofcoder",
+            "email": "info@landofcoder.com",
+            "homepage": "https://landofcoder.com"
         }
     ],
+    "minimum-stability": "dev",
+    "version": "1.0.4",
+    "require": {
+        "landofcoder/module-marketplace": "*"
+    },
     "autoload": {
-      "files": [ "registration.php" ],
-      "psr-4": {
-        "Lof\\MarketProductBundle\\": ""
-      }
+        "psr-4": {
+            "Lof\\MarketplaceGraphQl\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
     }
-  }
+}

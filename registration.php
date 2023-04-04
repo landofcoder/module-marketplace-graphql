@@ -14,12 +14,11 @@
  * version in the future.
  *
  * @category   Landofcoder
- * @package    Lof_MarketProductBundle
+ * @package    Lof_MarketplaceGraphQl
  * @copyright  Copyright (c) 2021 Landofcoder (https://www.landofcoder.com/)
  * @license    https://landofcoder.com/terms
  */
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Lof_MarketProductBundle',
-    __DIR__
-);
+use Magento\Framework\Component\ComponentRegistrar;
+
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Lof_MarketplaceGraphQl', __DIR__);
+

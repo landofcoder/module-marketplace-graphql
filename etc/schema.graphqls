@@ -48,6 +48,11 @@ type StoreConfig {
     lofmarketplace_group_seller_available : String  @doc(description: "Query by lofmarketplace_group_seller_available.")
     lofmarketplace_available_countries_enable : String  @doc(description: "Query by lofmarketplace_available_countries_enable.")
     lofmarketplace_available_countries : String  @doc(description: "Query by lofmarketplace_available_countries.")
+    lofmarketplace_seller_infomation_delivery_policy : String  @doc(description: "Query by lofmarketplace_seller_infomation_delivery_policy.")
+    lofmarketplace_seller_infomation_benefits : String  @doc(description: "Query by lofmarketplace_seller_infomation_benefits.")
+    lofmarketplace_google_analytics_enable : String  @doc(description: "Query by lofmarketplace_google_analytics_enable.")
+    lofmarketplace_google_analytics_account : String  @doc(description: "Query by lofmarketplace_google_analytics_account.")
+    lofmarketplace_google_analytics_anonymize : String  @doc(description: "Query by lofmarketplace_google_analytics_anonymize.")
 }
 
 type Query {
