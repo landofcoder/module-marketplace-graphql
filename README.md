@@ -13,6 +13,17 @@
 ## Main Functionalities
 magento 2 marketplace graphql extension
 
+## Marketplace Addons GraphQL Extensions
+- [Seller Coupon Code](https://github.com/landofcoder/module-seller-coupon-graph-ql)
+- [Seller Chat](https://github.com/landofcoder/module-seller-chat-graphql)
+- [Seller Split Cart](https://github.com/landofcoder/module-split-cart-graph-ql)
+- [Seller Product List - Products Slider](https://github.com/landofcoder/module-seller-product-list-graph-ql)
+- [Seller Blog](https://github.com/landofcoder/module-seller-blog-graph-ql)
+- [Seller Product](https://github.com/landofcoder/module-marketplace-seller-product-graph-ql)
+- [Seller Settings](https://github.com/landofcoder/module-marketplace-seller-settings-graph-ql)
+- [Seller Delivery Time Slots](https://github.com/landofcoder/module-seller-delivery-time-slot-graph-ql)
+- Comming soon...
+  
 ## Installation
 \* = in production please use the `--keep-generated` option
 
